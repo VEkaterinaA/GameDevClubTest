@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class HeroController : MonoBehaviour
 {
+    [HideInInspector]
     public Joystick joystick;
     
     private Rigidbody2D RigidbodyPlayer;
