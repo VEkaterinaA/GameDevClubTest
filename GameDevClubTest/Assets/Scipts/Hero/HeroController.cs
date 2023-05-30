@@ -1,30 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class HeroController : MonoBehaviour
 {
     [HideInInspector]
     public Joystick joystick;
-    
-    private Rigidbody2D RigidbodyPlayer;
 
-    public float dirX, dirY;
-    public float speed;
+    private Rigidbody2D RigidbodyHero;
+
+    private Vector2 move;
+
+    private const float speed = 2;
 
     private void Start()
     {
-        RigidbodyPlayer = GetComponent<Rigidbody2D>();
+        RigidbodyHero = GetComponent<Rigidbody2D>();
     }
 
-    void Update()
+    private void Update()
     {
-        dirX = joystick.Horizontal * speed;
-        dirY = joystick.Vertical * speed;
-    }
+        move.x = joystick.Horizontal * speed ;
+        move.y = joystick.Vertical * speed;
 
-    void FixedUpdate()
+    }
+    private void FixedUpdate()
     {
-        RigidbodyPlayer.velocity = new Vector2(dirX,dirY);
+        //RigidbodyHero.velocity = new Vector2(dirX, dirY);
+        RigidbodyHero.MovePosition(RigidbodyHero.position + move * speed * Time.deltaTime);
     }
 }
