@@ -28,4 +28,5 @@ public class HeroController : MonoBehaviour
         //RigidbodyHero.velocity = new Vector2(dirX, dirY);
         RigidbodyHero.MovePosition(RigidbodyHero.position + move * speed * Time.deltaTime);
     }
+
 }
