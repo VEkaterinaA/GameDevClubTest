@@ -13,7 +13,7 @@ public class CameraController : MonoBehaviour
     
 
     [Inject]
-    void Construct(HeroController heroController)
+    public void Construct(HeroController heroController)
     {
         _heroController = heroController;
     }

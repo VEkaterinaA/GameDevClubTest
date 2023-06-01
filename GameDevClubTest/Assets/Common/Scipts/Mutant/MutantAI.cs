@@ -1,3 +1,5 @@
+using Assets.Common.Scipts.Mutant;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
 using Zenject;
@@ -6,10 +8,12 @@ using Random = UnityEngine.Random;
 public class MutantAI : MonoBehaviour
 {
     private NavMeshAgent navMeshAgent;
+    //Classes
     private HeroController _heroController;
-
+    private Attack _attack;
+    private MutantPositionGeneration _mutantPositionGeneration;
     //Patroling
-    public Vector2 walkPoint;
+    private Vector2 walkPoint;
     bool walkPointSet;
     public float walkPointRange;
 
@@ -20,16 +24,22 @@ public class MutantAI : MonoBehaviour
     //States
     public float sightRange, attackRange;
 
+    private Vector2 randomPoint;
+
     [Inject]
-    void Construct(HeroController heroController)
+    void Construct(HeroController heroController, MutantPositionGeneration mutantPositionGeneration, Attack attack)
     {
         _heroController = heroController;
+        _mutantPositionGeneration = mutantPositionGeneration;
+        _attack = attack;
     }
     private void Start()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.updateUpAxis = false;
         navMeshAgent.updateRotation = false;
+
+        SettingPositionMutant();
     }
     private void Update()
     {
@@ -51,6 +61,11 @@ public class MutantAI : MonoBehaviour
             Patroling();
         }
     }
+    private void SettingPositionMutant()
+    {
+        transform.position = _mutantPositionGeneration.RandomMutantPositionGeneration();
+    }
+
     private void Patroling()
     {
         if (!walkPointSet)
@@ -102,5 +117,7 @@ public class MutantAI : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, sightRange);
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 }

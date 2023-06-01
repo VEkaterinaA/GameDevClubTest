@@ -1,17 +1,26 @@
+using Assets.Common.Scipts.Hero;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Zenject;
 
 public class HeroController : MonoBehaviour
 {
+    private HeroMove _heroMove;
+
     [HideInInspector]
     public Joystick joystick;
 
     private Rigidbody2D RigidbodyHero;
 
-    private Vector2 move;
+    private float dirX,dirY;
 
-    private const float speed = 2;
+    private const float speed = 3;
 
+    [Inject]
+    public void Construct(HeroMove heroMove)
+    {
+        _heroMove = heroMove;
+    }
     private void Start()
     {
         RigidbodyHero = GetComponent<Rigidbody2D>();
@@ -19,14 +28,11 @@ public class HeroController : MonoBehaviour
 
     private void Update()
     {
-        move.x = joystick.Horizontal * speed ;
-        move.y = joystick.Vertical * speed;
-
+        _heroMove.JoystickCoordinateUpdate(joystick,speed,out dirX,out dirY);
     }
     private void FixedUpdate()
     {
-        //RigidbodyHero.velocity = new Vector2(dirX, dirY);
-        RigidbodyHero.MovePosition(RigidbodyHero.position + move * speed * Time.deltaTime);
+        RigidbodyHero.velocity = _heroMove.MotionVector(dirX,dirY);
     }
 
 }
