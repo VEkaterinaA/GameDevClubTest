@@ -531,6 +531,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkPointRange: 10
+  timeBetweenPatrols: 3
   timeBetweenAttacks: 2
   sightRange: 15
   attackRange: 3

@@ -1,6 +1,7 @@
 using Assets.Common.Infrastructure;
 using Assets.Common.Scipts.Hero;
 using Assets.Common.Scipts.Mutant;
+using Assets.Common.Scipts.Mutant.MutantModes;
 using Cinemachine;
 using UnityEngine;
 using Zenject;
@@ -59,11 +60,6 @@ public class LocationInstaller : MonoInstaller, IInitializable
 
     }
 
-    private void HeroDisplaySetting(HeroController heroController)
-    {
-        heroController.joystick = joystick;
-        VirtualCamera.Follow = heroController.transform;
-    }
     private void BindMutantFactory()
     {
         Container
@@ -71,14 +67,31 @@ public class LocationInstaller : MonoInstaller, IInitializable
             .To<MutantFactory>()
             .AsSingle();
 
-        Container
-            .Bind<Attack>()
-            .AsSingle();
+        BindMutantMode();
 
         Container
             .Bind<MutantPositionGeneration>()
             .AsSingle();
     }
+    private void BindMutantMode()
+    {
+        Container
+            .Bind<Attack>()
+            .AsSingle();
+        Container
+            .Bind<Chase>()
+            .AsSingle();
+        Container
+            .Bind<Patrol>()
+            .AsSingle();
+
+    }
+    private void HeroDisplaySetting(HeroController heroController)
+    {
+        heroController.joystick = joystick;
+        VirtualCamera.Follow = heroController.transform;
+    }
+
     public void Initialize()
     {
 

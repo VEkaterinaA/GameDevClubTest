@@ -1,4 +1,6 @@
+using Assets.Common.Scipts.Mutant.MutantModes;
 using Assets.Common.Scipts.Mutant;
+using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
@@ -12,14 +14,16 @@ public class MutantAI : MonoBehaviour
     private HeroController _heroController;
     private Attack _attack;
     private MutantPositionGeneration _mutantPositionGeneration;
+    private Chase _chase;
+    private Patrol _patrol;
     //Patroling
-    private Vector2 walkPoint;
-    bool walkPointSet;
+    //private Vector2 walkPoint;
+    //bool walkPointSet;
     public float walkPointRange;
-
+    public float timeBetweenPatrols;
     //Attacking
     public float timeBetweenAttacks;
-    private bool alreadyAttacked;
+    //private bool alreadyAttacked;
 
     //States
     public float sightRange, attackRange;
@@ -27,11 +31,13 @@ public class MutantAI : MonoBehaviour
     private Vector2 randomPoint;
 
     [Inject]
-    void Construct(HeroController heroController, MutantPositionGeneration mutantPositionGeneration, Attack attack)
+    void Construct(HeroController heroController, MutantPositionGeneration mutantPositionGeneration, Attack attack, Chase chase, Patrol patrol)
     {
         _heroController = heroController;
         _mutantPositionGeneration = mutantPositionGeneration;
         _attack = attack;
+        _chase = chase;
+        _patrol = patrol;
     }
     private void Start()
     {
@@ -45,20 +51,23 @@ public class MutantAI : MonoBehaviour
     {
         Vector2 distanceToWalkPoint = transform.position - _heroController.transform.position;
         
-        if(distanceToWalkPoint.x<sightRange && distanceToWalkPoint.y < sightRange)
+        if(distanceToWalkPoint.x < sightRange && distanceToWalkPoint.y < sightRange)
         {
+            StopCoroutine(nameof(_patrol.CoroutinePatroling));
+
             if(distanceToWalkPoint.x < attackRange && distanceToWalkPoint.y < attackRange)
             {
-                AttackHero();
+                StartCoroutine((_attack.CoroutineAttackHero(navMeshAgent,transform,timeBetweenAttacks)));
             }
             else
             {
-                ChaseHero();
+                _chase.ChaseHero(navMeshAgent,_heroController.transform.position);
             }
         }
         else
         {
-            Patroling();
+            StopCoroutine(nameof(_attack.CoroutineAttackHero));
+            StartCoroutine((_patrol.CoroutinePatroling(navMeshAgent,transform.position,timeBetweenPatrols,walkPointRange,_mutantPositionGeneration)));
         }
     }
     private void SettingPositionMutant()
@@ -66,50 +75,47 @@ public class MutantAI : MonoBehaviour
         transform.position = _mutantPositionGeneration.GetRandomStartPointMutantPositionGeneration();
     }
 
-    private void Patroling()
-    {
-        if (!walkPointSet)
-        {
-            SearchWalkPoint();
-        }
-        if (walkPointSet)
-        {
-            navMeshAgent.SetDestination(walkPoint);
-        }
-        Vector2 distanceToWalkPoint = new Vector2(transform.position.x,transform.position.y) - walkPoint;
+    //private IEnumerator CoroutinePatroling()
+    //{
+    //    if (!walkPointSet)
+    //    {
+    //        SearchWalkPoint();
+    //    }
+    //    if (walkPointSet)
+    //    {
+    //        navMeshAgent.SetDestination(walkPoint);
+    //    }
+    //    Vector2 distanceToWalkPoint = new Vector2(transform.position.x,transform.position.y) - walkPoint;
 
-        if(distanceToWalkPoint.magnitude<1f)
-        {
-            walkPointSet = false;
-        }
-    }
-    private void ChaseHero()
-    {
-        navMeshAgent.SetDestination(_heroController.transform.position);
-    }
-    private void AttackHero()
-    {
-        navMeshAgent.SetDestination(transform.position);
+    //    if(distanceToWalkPoint.magnitude<1f)
+    //    {
+    //        yield return new WaitForSeconds(timeBetweenPatrols);
+    //        walkPointSet = false;
+    //    }
+    //}
+    //private void ChaseHero()
+    //{
+    //    navMeshAgent.SetDestination(_heroController.transform.position);
+    //}
+    //private IEnumerator CoroutineAttackHero()
+    //{
+    //    navMeshAgent.SetDestination(transform.position);
         
-        if(!alreadyAttacked)
-        {
-            //Attack
+    //    if(!alreadyAttacked)
+    //    {
+    //        //Attack
 
-            //
-            alreadyAttacked = true;
-            Invoke(nameof(ResetAttack),timeBetweenAttacks);
-        }
-    }
-    private void SearchWalkPoint()
-    {
-        walkPoint = _mutantPositionGeneration.GetRandomMutantPositionGeneration(transform.position, walkPointRange);
+    //        //
+    //        yield return new WaitForSeconds(timeBetweenAttacks);
+    //        alreadyAttacked = false;
+    //    }
+    //}
+    //private void SearchWalkPoint()
+    //{
+    //    walkPoint = _mutantPositionGeneration.GetRandomMutantPositionGeneration(transform.position, walkPointRange);
 
-        walkPointSet = true;
-    }
-    private void ResetAttack()
-    {
-        alreadyAttacked = false;
-    }
+    //    walkPointSet = true;
+    //}
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
