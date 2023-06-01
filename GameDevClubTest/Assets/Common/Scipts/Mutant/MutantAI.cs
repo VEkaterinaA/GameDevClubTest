@@ -63,7 +63,7 @@ public class MutantAI : MonoBehaviour
     }
     private void SettingPositionMutant()
     {
-        transform.position = _mutantPositionGeneration.RandomMutantPositionGeneration();
+        transform.position = _mutantPositionGeneration.GetRandomStartPointMutantPositionGeneration();
     }
 
     private void Patroling()
@@ -102,10 +102,7 @@ public class MutantAI : MonoBehaviour
     }
     private void SearchWalkPoint()
     {
-        float randomX = Random.Range(-walkPointRange, walkPointRange);
-        float randomY = Random.Range(-walkPointRange, walkPointRange);
-
-        walkPoint = new Vector2(transform.position.x + randomX, transform.position.y + randomY);
+        walkPoint = _mutantPositionGeneration.GetRandomMutantPositionGeneration(transform.position, walkPointRange);
 
         walkPointSet = true;
     }

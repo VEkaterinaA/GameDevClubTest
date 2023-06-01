@@ -530,8 +530,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0dcc2f3bf76b70419309ee647ceb001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkPointRange: 5
-  timeBetweenAttacks: 1
+  walkPointRange: 10
+  timeBetweenAttacks: 2
   sightRange: 15
   attackRange: 3
 --- !u!1 &3587209567982574325
