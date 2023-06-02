@@ -17,31 +17,29 @@ public class MutantAI : MonoBehaviour
     private Chase _chase;
     private Patrol _patrol;
     //Patroling
-    //private Vector2 walkPoint;
-    //bool walkPointSet;
     public float walkPointRange;
     public float timeBetweenPatrols;
     //Attacking
     public float timeBetweenAttacks;
-    //private bool alreadyAttacked;
-
     //States
     public float sightRange, attackRange;
 
     private Vector2 randomPoint;
 
     [Inject]
-    void Construct(HeroController heroController, MutantPositionGeneration mutantPositionGeneration, Attack attack, Chase chase, Patrol patrol)
+    void Construct(HeroController heroController, MutantPositionGeneration mutantPositionGeneration)
     {
         _heroController = heroController;
         _mutantPositionGeneration = mutantPositionGeneration;
-        _attack = attack;
-        _chase = chase;
-        _patrol = patrol;
     }
     private void Start()
     {
+        _attack = new Attack();
+        _chase = new Chase();
+        _patrol = new Patrol();
+
         navMeshAgent = GetComponent<NavMeshAgent>();
+
         navMeshAgent.updateUpAxis = false;
         navMeshAgent.updateRotation = false;
 
@@ -75,52 +73,13 @@ public class MutantAI : MonoBehaviour
         transform.position = _mutantPositionGeneration.GetRandomStartPointMutantPositionGeneration();
     }
 
-    //private IEnumerator CoroutinePatroling()
-    //{
-    //    if (!walkPointSet)
-    //    {
-    //        SearchWalkPoint();
-    //    }
-    //    if (walkPointSet)
-    //    {
-    //        navMeshAgent.SetDestination(walkPoint);
-    //    }
-    //    Vector2 distanceToWalkPoint = new Vector2(transform.position.x,transform.position.y) - walkPoint;
-
-    //    if(distanceToWalkPoint.magnitude<1f)
-    //    {
-    //        yield return new WaitForSeconds(timeBetweenPatrols);
-    //        walkPointSet = false;
-    //    }
-    //}
-    //private void ChaseHero()
-    //{
-    //    navMeshAgent.SetDestination(_heroController.transform.position);
-    //}
-    //private IEnumerator CoroutineAttackHero()
-    //{
-    //    navMeshAgent.SetDestination(transform.position);
-        
-    //    if(!alreadyAttacked)
-    //    {
-    //        //Attack
-
-    //        //
-    //        yield return new WaitForSeconds(timeBetweenAttacks);
-    //        alreadyAttacked = false;
-    //    }
-    //}
-    //private void SearchWalkPoint()
-    //{
-    //    walkPoint = _mutantPositionGeneration.GetRandomMutantPositionGeneration(transform.position, walkPointRange);
-
-    //    walkPointSet = true;
-    //}
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, sightRange);
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, walkPointRange);
         Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, sightRange);
+        Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 }

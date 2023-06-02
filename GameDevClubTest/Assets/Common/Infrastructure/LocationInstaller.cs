@@ -67,24 +67,10 @@ public class LocationInstaller : MonoInstaller, IInitializable
             .To<MutantFactory>()
             .AsSingle();
 
-        BindMutantMode();
 
         Container
             .Bind<MutantPositionGeneration>()
             .AsSingle();
-    }
-    private void BindMutantMode()
-    {
-        Container
-            .Bind<Attack>()
-            .AsSingle();
-        Container
-            .Bind<Chase>()
-            .AsSingle();
-        Container
-            .Bind<Patrol>()
-            .AsSingle();
-
     }
     private void HeroDisplaySetting(HeroController heroController)
     {
