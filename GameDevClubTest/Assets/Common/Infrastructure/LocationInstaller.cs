@@ -8,11 +8,13 @@ using Zenject;
 
 public class LocationInstaller : MonoInstaller, IInitializable
 {
+    public InventoryController inventory;
+
     public Transform StartPoint;
+    public Transform RandomCoordinateZone;
     public GameObject HeroPrefab;
     public Joystick joystick;//add joystick to the hero
     public CinemachineVirtualCamera VirtualCamera;//fill VirtualCamera.Follow
-    public Transform RandomCoordinateZone;
     public override void InstallBindings()
     {
         BindInstallerInterfaces();
@@ -43,15 +45,10 @@ public class LocationInstaller : MonoInstaller, IInitializable
 
     private void BindHero()
     {
-        Container
-            .Bind<HeroMove>()
-            .AsSingle();
-
-
         HeroController heroController = Container
             .InstantiatePrefabForComponent<HeroController>(HeroPrefab, StartPoint.position, Quaternion.identity, null);
 
-        HeroDisplaySetting(heroController);
+        HeroInterfaceSetup(heroController);
 
         Container
             .Bind<HeroController>()
@@ -59,7 +56,6 @@ public class LocationInstaller : MonoInstaller, IInitializable
             .AsSingle();
 
     }
-
     private void BindMutantFactory()
     {
         Container
@@ -72,8 +68,9 @@ public class LocationInstaller : MonoInstaller, IInitializable
             .Bind<MutantPositionGeneration>()
             .AsSingle();
     }
-    private void HeroDisplaySetting(HeroController heroController)
+    private void HeroInterfaceSetup(HeroController heroController)
     {
+        heroController.inventory = inventory;
         heroController.joystick = joystick;
         VirtualCamera.Follow = heroController.transform;
     }
