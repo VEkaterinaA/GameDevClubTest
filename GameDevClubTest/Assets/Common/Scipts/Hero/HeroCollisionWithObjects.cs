@@ -25,7 +25,7 @@ namespace Assets.Common.Scipts.Hero
 
                 if(firstEmptySlot!=null)
                 {
-                    firstEmptySlot.HoldItem(item);
+                    firstEmptySlot.HoldItem(item, inventoryItem.Count);
                     return;
                 }
                 else
@@ -36,7 +36,7 @@ namespace Assets.Common.Scipts.Hero
             }
             else
             {
-                slot.SetCount(item.Count);
+                slot.SetCount(inventoryItem.Count);
                 return;
             }
         }

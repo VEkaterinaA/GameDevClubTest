@@ -1,53 +1,79 @@
 ﻿using Assets.Common.Scipts.HeroInventory;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using UnityEditor;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Zenject;
-using Zenject.Asteroids;
-using Button = UnityEngine.UI.Button;
+using static UnityEditor.Progress;
+using Item = Assets.Common.Scipts.HeroInventory.Item;
 
 public class InventoryController : MonoBehaviour
 {
-    public Button inventoryButton;
+    public SlotChangeWindow slotChangeWindow;
+    [HideInInspector]
+    public VisualElement m_Root;
+    private VisualElement m_SlotContainer;
+
+    private InventorySlotVE SelectedInventorySlotVE;
 
     [HideInInspector]
     public List<InventorySlotVE> slots = new List<InventorySlotVE>();
 
-    private bool IsEnabled = false;
-
-    private VisualElement m_Root;
-    private VisualElement m_SlotContainer;
-
-    private string pathSprites = "Sprites/Inventory/";
-    private void Start()
+    private void Awake()
     {
         LoadSlots();
-
-        inventoryButton.onClick.AddListener(UseInventoryOnClick);
-        slots[4].item.image.sprite = Resources.Load<Sprite>(pathSprites + "5.45x39");
     }
-
+    public void Subscribe()
+    {
+        slotChangeWindow.OnUndoSlotButtonChange += OnClickUndoSlotButtonChange;
+        slotChangeWindow.OnSlotButtonRemove += OnClickSlotButtonRemove;
+    }
+    void Unsubscribe()
+    {
+        slotChangeWindow.OnUndoSlotButtonChange -= OnClickUndoSlotButtonChange;
+        slotChangeWindow.OnSlotButtonRemove -= OnClickSlotButtonRemove;
+    }
     public void LoadSlots()
     {
         m_Root = GetComponent<UIDocument>().rootVisualElement;
         m_SlotContainer = m_Root.Q<VisualElement>("SlotContainer");
+        var CloseInventary = m_Root.Q<Button>();
+        CloseInventary.clicked += () => { m_Root.style.display = DisplayStyle.None; ; };
 
-        for (int i = 0; i < 20; i++)
+        var item0 = new Item() { ImageName = "5.45x39", typeSlot = TypeSlot.Bullet };
+        slots[0].HoldItem(item0, 30);
+
+        for (int i = 0; i < 19; i++)
         {
-            InventorySlotVE item = new InventorySlotVE();
+            InventorySlotVE item = new InventorySlotVE(this);
             slots.Add(item);
             m_SlotContainer.Add(item);
         }
     }
-    void UseInventoryOnClick()
+    public void SlotChange(InventorySlotVE inventorySlotVE)
     {
-        IsEnabled = !IsEnabled;
-        gameObject.SetActive(IsEnabled);
+        SelectedInventorySlotVE = inventorySlotVE;
+        m_Root.style.display = DisplayStyle.None;
+        slotChangeWindow.gameObject.SetActive(true);
+        Subscribe();
+        slotChangeWindow.SlotChange(inventorySlotVE);
     }
 
+    private void OnClickSlotButtonRemove()
+    {
+        m_SlotContainer.Remove(SelectedInventorySlotVE);
+        slots.Remove(SelectedInventorySlotVE);
+
+        InventorySlotVE item = new InventorySlotVE(this);
+        slots.Add(item);
+        m_SlotContainer.Add(item);
+
+
+        m_Root.style.display = DisplayStyle.Flex;
+        Unsubscribe();
+    }
+    private void OnClickUndoSlotButtonChange()
+    {
+        m_Root.style.display = DisplayStyle.Flex;
+        Unsubscribe();
+
+    }
 }

@@ -7,8 +7,7 @@ namespace Assets.Common.Scipts.HeroInventory
     public class Item
     {
         public string GUID;
-        public Image image;
-        public int Count;
+        public string ImageName;
         public TypeSlot typeSlot;
 
 

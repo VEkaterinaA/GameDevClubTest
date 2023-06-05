@@ -5,7 +5,7 @@ namespace Assets.Common.Scipts.HeroInventory
     public class InventoryItem : MonoBehaviour
     {
         public Item item;
-
+        public int Count;
         private void Awake()
         {
             item = new Item();

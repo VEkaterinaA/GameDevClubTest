@@ -5,6 +5,7 @@
         Other,
         Weapon,
         Food,
-        Clothes
+        Clothes,
+        Bullet
     }
 }
