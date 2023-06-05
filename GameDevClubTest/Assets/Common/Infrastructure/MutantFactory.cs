@@ -21,6 +21,6 @@ public class MutantFactory : IMutantFactory
     }
     public void Create(MutantType mutantType)
     {
-     _container.InstantiatePrefab(ZombiePrefab,new Vector2(700,700),Quaternion.identity,null);
+     _container.InstantiatePrefab(ZombiePrefab,new Vector2(20,20),Quaternion.identity,null);
     }
 }

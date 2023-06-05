@@ -1,10 +1,6 @@
 using Assets.Common.Scipts.Hero;
-using Assets.Common.Scipts.HeroInventory;
 using System;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using Zenject;
 
 public class HeroController : MonoBehaviour
 {
@@ -19,11 +15,13 @@ public class HeroController : MonoBehaviour
     private Rigidbody2D RigidbodyHero;
 
     #region Attack
+    [HideInInspector]
     public Transform TrackedEnemyTransform;
     public event Action OnCollisionHeroFieldWithEnemy;
     #endregion
 
-    private float dirX,dirY;
+    private bool IsMoveLeft = false;
+    private float dirX, dirY;
     public float speed = 3;
 
     private void Start()
@@ -35,33 +33,63 @@ public class HeroController : MonoBehaviour
     }
     private void Update()
     {
-        _heroMove.JoystickCoordinateUpdate(joystick,speed,out dirX,out dirY);
+        _heroMove.JoystickCoordinateUpdate(joystick, speed, out dirX, out dirY);
     }
     private void FixedUpdate()
     {
-        RigidbodyHero.velocity = _heroMove.MotionVector(dirX,dirY);
+        RigidbodyHero.velocity = _heroMove.MotionVector(dirX, dirY);
+        if (RigidbodyHero.velocity.x < 0)
+        {
+            transform.rotation = GetQuaternion(180);
+        }
+        else
+        {
+            transform.rotation = GetQuaternion(0);
+        }
     }
-
-    public void CollisionHeroFieldWithEnemy(Transform TrackedEnemyTransform)
-    {
-        OnCollisionHeroFieldWithEnemy?.Invoke();
-    }
-    public void CollisionHeroFieldWithEnemyExit()
-    {
-        OnCollisionHeroFieldWithEnemy?.Invoke();
-    }
-
     private void OnCollisionEnter2D(Collision2D objectCollisionEventDetails)
     {
-        _heroCollisionWithObjects.MoveItemToInventory(objectCollisionEventDetails, inventory.slots);
-        Destroy(objectCollisionEventDetails.gameObject);
-
+        var tag = objectCollisionEventDetails.transform.tag;
+        if (tag == null)
+        {
+            return;
+        }
+        if (tag == "Inventory")
+        {
+            _heroCollisionWithObjects.MoveItemToInventory(objectCollisionEventDetails, inventory.slots);
+            Destroy(objectCollisionEventDetails.gameObject);
+            return;
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D objectCollisionEventDetails)
+    {
+        var tag = objectCollisionEventDetails.transform.tag;
+        if(tag=="NPC")
+        {
+            OnCollisionHeroFieldWithEnemy?.Invoke();
+        }
+    }
+    private void OnTriggerExit2D(Collider2D objectCollisionEventDetails)
+    {
+        var tag = objectCollisionEventDetails.transform.tag;
+        if(tag=="NPC")
+        {
+            this.TrackedEnemyTransform = objectCollisionEventDetails.transform;
+            OnCollisionHeroFieldWithEnemy?.Invoke();
+        }
     }
     private void OnDestroy()
     {
         if (OnCollisionHeroFieldWithEnemy != null)
             foreach (var d in OnCollisionHeroFieldWithEnemy.GetInvocationList())
                 OnCollisionHeroFieldWithEnemy -= (d as Action);
+    }
+    private Quaternion GetQuaternion(int corner)
+    {
+        Quaternion rot = transform.rotation;
+        rot.y = corner;
+        return rot;
+
     }
 
 }

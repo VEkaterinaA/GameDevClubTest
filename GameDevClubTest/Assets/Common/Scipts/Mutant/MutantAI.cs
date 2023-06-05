@@ -16,6 +16,7 @@ public class MutantAI : MonoBehaviour
     private MutantPositionGeneration _mutantPositionGeneration;
     private Chase _chase;
     private Patrol _patrol;
+    private MutantTurn _mutantTurn;
     //Patroling
     public float walkPointRange;
     public float timeBetweenPatrols;
@@ -41,7 +42,7 @@ public class MutantAI : MonoBehaviour
         _attack = new Attack();
         _chase = new Chase();
         _patrol = new Patrol();
-
+        _mutantTurn = new MutantTurn();
 
 
         SettingPositionMutant();
@@ -60,13 +61,13 @@ public class MutantAI : MonoBehaviour
             }
             else
             {
-                _chase.ChaseHero(navMeshAgent,_heroController.transform.position);
+                _chase.ChaseHero(_mutantTurn,navMeshAgent,_heroController.transform.position);
             }
         }
         else
         {
             StopCoroutine(nameof(_attack.CoroutineAttackHero));
-            StartCoroutine((_patrol.CoroutinePatroling(navMeshAgent,transform.position,timeBetweenPatrols,walkPointRange,_mutantPositionGeneration)));
+            StartCoroutine((_patrol.CoroutinePatroling(_mutantTurn, navMeshAgent,transform.position,timeBetweenPatrols,walkPointRange,_mutantPositionGeneration)));
         }
     }
     private void SettingPositionMutant()

@@ -111,7 +111,7 @@ Transform:
   m_GameObject: {fileID: 2529599918193395471}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 1}
+  m_LocalScale: {x: 4, y: 4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8370590876280487822}
@@ -179,7 +179,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -486,7 +486,7 @@ GameObject:
   - component: {fileID: -719671459111176590}
   m_Layer: 6
   m_Name: Hero
-  m_TagString: Untagged
+  m_TagString: Hero
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -570,6 +570,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventory: {fileID: 0}
   joystick: {fileID: 0}
+  TrackedEnemyTransform: {fileID: 0}
+  speed: 3
 --- !u!1 &8953042376304503051
 GameObject:
   m_ObjectHideFlags: 0

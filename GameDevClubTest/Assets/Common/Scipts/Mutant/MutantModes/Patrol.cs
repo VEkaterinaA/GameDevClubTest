@@ -15,22 +15,33 @@ namespace Assets.Common.Scipts.Mutant.MutantModes
     {
         private Vector2 walkPoint;
         bool walkPointSet;
-        public IEnumerator CoroutinePatroling(NavMeshAgent navMeshAgent,Vector2 position,float timeBetweenPatrols, float walkPointRange, MutantPositionGeneration _mutantPositionGeneration)
+        public IEnumerator CoroutinePatroling(MutantTurn mutantTurn,NavMeshAgent navMeshAgent,Vector2 PointPositiontOfRandomPointSearchArea,float timeBetweenPatrols, float walkPointRange, MutantPositionGeneration _mutantPositionGeneration)
         {
-            if (!walkPointSet)
+            var MutantTransformScale = navMeshAgent.transform.localScale;
+            var MutantPositionX = navMeshAgent.transform.position.x;
+            if (navMeshAgent == null)
             {
-                SearchWalkPoint(position, walkPointRange, _mutantPositionGeneration);
+               yield return null;
             }
-            if (walkPointSet)
+            else
             {
-                navMeshAgent.SetDestination(walkPoint);
-            }
-            Vector2 distanceToWalkPoint = position - walkPoint;
+                if (!walkPointSet)
+                {
+                    SearchWalkPoint(PointPositiontOfRandomPointSearchArea, walkPointRange, _mutantPositionGeneration);
+                }
+                if (walkPointSet)
+                {
+                    navMeshAgent.SetDestination(walkPoint);
+                    mutantTurn.RotationMutantRelativeToMovement(navMeshAgent.velocity, navMeshAgent.transform, walkPoint);
 
-            if (distanceToWalkPoint.magnitude < 1f)
-            {
-                yield return new WaitForSeconds(timeBetweenPatrols);
-                walkPointSet = false;
+                }
+                Vector2 distanceToWalkPoint = PointPositiontOfRandomPointSearchArea - walkPoint;
+
+                if (distanceToWalkPoint.magnitude < 1f)
+                {
+                    yield return new WaitForSeconds(timeBetweenPatrols);
+                    walkPointSet = false;
+                }
             }
         }
         private void SearchWalkPoint(Vector2 position, float walkPointRange, MutantPositionGeneration _mutantPositionGeneration)
