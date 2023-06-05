@@ -1,5 +1,6 @@
 using Assets.Common.Scipts.Hero;
 using Assets.Common.Scipts.HeroInventory;
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -11,14 +12,19 @@ public class HeroController : MonoBehaviour
 
     private HeroMove _heroMove;
     private HeroCollisionWithObjects _heroCollisionWithObjects;
+
     [HideInInspector]
     public Joystick joystick;
 
     private Rigidbody2D RigidbodyHero;
 
-    private float dirX,dirY;
+    #region Attack
+    public Transform TrackedEnemyTransform;
+    public event Action OnCollisionHeroFieldWithEnemy;
+    #endregion
 
-    private const float speed = 3;
+    private float dirX,dirY;
+    public float speed = 3;
 
     private void Start()
     {
@@ -35,11 +41,27 @@ public class HeroController : MonoBehaviour
     {
         RigidbodyHero.velocity = _heroMove.MotionVector(dirX,dirY);
     }
+
+    public void CollisionHeroFieldWithEnemy(Transform TrackedEnemyTransform)
+    {
+        OnCollisionHeroFieldWithEnemy?.Invoke();
+    }
+    public void CollisionHeroFieldWithEnemyExit()
+    {
+        OnCollisionHeroFieldWithEnemy?.Invoke();
+    }
+
     private void OnCollisionEnter2D(Collision2D objectCollisionEventDetails)
     {
         _heroCollisionWithObjects.MoveItemToInventory(objectCollisionEventDetails, inventory.slots);
         Destroy(objectCollisionEventDetails.gameObject);
 
+    }
+    private void OnDestroy()
+    {
+        if (OnCollisionHeroFieldWithEnemy != null)
+            foreach (var d in OnCollisionHeroFieldWithEnemy.GetInvocationList())
+                OnCollisionHeroFieldWithEnemy -= (d as Action);
     }
 
 }

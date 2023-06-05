@@ -39,7 +39,11 @@ public class InventoryController : MonoBehaviour
         CloseInventary.clicked += () => { m_Root.style.display = DisplayStyle.None; ; };
 
         var item0 = new Item() { ImageName = "5.45x39", typeSlot = TypeSlot.Bullet };
-        slots[0].HoldItem(item0, 30);
+        
+        slots.Add(new InventorySlotVE(this));
+        var SlotBullet = slots[0];
+        SlotBullet.HoldItem(item0, 30);
+        m_SlotContainer.Add(SlotBullet);
 
         for (int i = 0; i < 19; i++)
         {

@@ -34,14 +34,15 @@ public class MutantAI : MonoBehaviour
     }
     private void Start()
     {
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        navMeshAgent.updateUpAxis = false;
+        navMeshAgent.updateRotation = false;
+
         _attack = new Attack();
         _chase = new Chase();
         _patrol = new Patrol();
 
-        navMeshAgent = GetComponent<NavMeshAgent>();
 
-        navMeshAgent.updateUpAxis = false;
-        navMeshAgent.updateRotation = false;
 
         SettingPositionMutant();
     }

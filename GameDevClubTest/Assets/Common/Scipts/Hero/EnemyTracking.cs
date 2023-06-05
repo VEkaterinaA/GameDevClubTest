@@ -1,18 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class EnemyTracking : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private HeroController _heroController;
 
-    // Update is called once per frame
-    void Update()
+    [Inject]
+    private void Construct(HeroController heroController)
     {
-        
+        _heroController = heroController;
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+
+        _heroController.CollisionHeroFieldWithEnemy(collision.transform);
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        _heroController.CollisionHeroFieldWithEnemyExit();
     }
 }
