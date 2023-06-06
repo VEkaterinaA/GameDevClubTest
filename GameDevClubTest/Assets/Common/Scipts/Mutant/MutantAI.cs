@@ -118,12 +118,12 @@ public class MutantAI : MonoBehaviour
             if (prefab != null)
             {
                 var inventoryItem = prefab.GetComponent<InventoryItem>();
-
-                inventoryItem.SetItem(_inventoryItemDataBase.GetRandomInventoryItem(), Random.Range(1, 5));
+                var itemRandom = _inventoryItemDataBase.GetRandomInventoryItem();
+                inventoryItem.SetItem(itemRandom, Random.Range(1, 5));
             }
         }
         Unsubscribe();
-        Destroy(this);
+        Destroy(this.gameObject);
 
     }
     private void OnDrawGizmosSelected()

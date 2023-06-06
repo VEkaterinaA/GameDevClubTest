@@ -25,14 +25,16 @@ public class HeroController : MonoBehaviour
     public Transform TrackedMutantTransform;
 
     public event Action OnCollisionHeroFieldWithEnemy;
+
     #endregion
 
     public event Action OnHeroDeath;
 
-    private bool IsAttacked = false;
+    private bool IsShoot= false;
+    private bool IsAttackMode = false;
     private float dirX, dirY;
     public float speed = 3f;
-    public float timeBetweenAttacks = 1f;
+    public float timeBetweenAttacks = 0.3f;
     private void Start()
     {
         LoadHelperClasses();
@@ -47,7 +49,7 @@ public class HeroController : MonoBehaviour
     private void FixedUpdate()
     {
         RigidbodyHero.velocity = _heroMove.MotionVector(dirX, dirY);
-        if (IsAttacked)
+        if (IsAttackMode)
         {
             if (transform.position.x > TrackedMutantTransform.position.x)
             {
@@ -59,6 +61,7 @@ public class HeroController : MonoBehaviour
             }
             return;
         }
+
         if (RigidbodyHero.velocity.x < 0)
         {
             transform.rotation = Quaternion.Euler(0, 180, 0);
@@ -87,9 +90,20 @@ public class HeroController : MonoBehaviour
         var tag = objectCollisionEventDetails.transform.tag;
         if (tag == "NPC")
         {
-            IsAttacked = true;
+            IsAttackMode = true;
             TrackedMutantTransform = objectCollisionEventDetails.transform;
             OnCollisionHeroFieldWithEnemy?.Invoke();
+        }
+    }
+    private void OnTriggerStay2D(Collider2D objectCollisionEventDetails)
+    {
+        var tag = objectCollisionEventDetails.transform.tag;
+        if (tag == "NPC")
+        {
+            if (TrackedMutantTransform != null)
+            {
+                ElbowRotationWhenAttacking(TrackedMutantTransform);
+            }
         }
     }
     private void OnTriggerExit2D(Collider2D objectCollisionEventDetails)
@@ -97,9 +111,10 @@ public class HeroController : MonoBehaviour
         var tag = objectCollisionEventDetails.transform.tag;
         if (tag == "NPC")
         {
-            IsAttacked = false;
+            IsAttackMode = false;
             TrackedMutantTransform = null;
             OnCollisionHeroFieldWithEnemy?.Invoke();
+            elbowRotation.rotation = Quaternion.Euler(0, 0, 0);
         }
     }
     private void OnDestroy()
@@ -115,17 +130,21 @@ public class HeroController : MonoBehaviour
             Debug.Log("No mutant found during attack!");
             return;
         }
-        StartCoroutine(Attack());
         ElbowRotationWhenAttacking(TrackedMutantTransform);
+        Attack();
     }
-    public IEnumerator Attack()
+    public void Attack()
     {
         if (inventory.CountBullet != 0)
         {
-            var mutant = TrackedMutantTransform.GetComponent<MutantAI>();
-            yield return new WaitForSeconds(timeBetweenAttacks);
-            mutant._mutantTakingDamage.TakeDamage(_heroCharacteristics.damage);
-            inventory.SpendItem(inventory.slots[0].item, 1);
+            if (IsShoot == false)
+            {
+                IsShoot = true;
+                var mutant = TrackedMutantTransform.GetComponent<MutantAI>();
+                mutant._mutantTakingDamage.TakeDamage(_heroCharacteristics.damage);
+                inventory.SpendItem(inventory.slots[0].item, 1);
+                IsShoot = false;
+            }
         }
     }
     private void ElbowRotationWhenAttacking(Transform trackedMutantTransform)

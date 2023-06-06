@@ -18,7 +18,7 @@ namespace Assets.Common.Scipts.Hero.HelperClasses
                 return;
             }
             var item = inventoryItem.item;
-            var slot = slots.FirstOrDefault(u => u.item == item);
+            var slot = slots.FirstOrDefault(u =>u.IsEmpty!=true && (u.item.imagePath == item.imagePath && u.item.typeSlot == item.typeSlot));
             if (slot == null)
             {
                 var firstEmptySlot = slots.FirstOrDefault(u => u.IsEmpty==true);

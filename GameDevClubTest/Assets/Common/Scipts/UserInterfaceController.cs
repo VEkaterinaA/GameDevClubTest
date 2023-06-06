@@ -17,7 +17,7 @@ namespace Assets.Common.Scipts
         public GameObject shootButton;
         public Text textBulletCount;
 
-        public InventoryController Inventory;
+        public InventoryController _inventoryController;
         private HeroController _heroController;
 
         private bool IsHeroAttack = false;
@@ -34,14 +34,21 @@ namespace Assets.Common.Scipts
             var ShootButton = shootButton.GetComponentInChildren<Button>();
             ShootButton.onClick.AddListener(ShootButtonOnClick);
 
-            Inventory.m_Root.style.display = DisplayStyle.None;
+            _inventoryController.m_Root.style.display = DisplayStyle.None;
             inventoryButton.onClick.AddListener(UseInventoryOnClick);
         }
         private void Subscribe()
         {
             _heroController.OnCollisionHeroFieldWithEnemy += AttackButtonStateChange;
             _heroController.OnHeroDeath += OpenWindowGameOver;
+            _inventoryController.OnDropBullet += (int countBullet) => UpdateCountBulletLabel(countBullet);
         }
+
+        private void UpdateCountBulletLabel(int countBullet)
+        {
+            textBulletCount.text = countBullet.ToString();
+        }
+
         private void AttackButtonStateChange()
         {
             IsHeroAttack = !IsHeroAttack;
@@ -50,7 +57,7 @@ namespace Assets.Common.Scipts
 
         void UseInventoryOnClick()
         {
-            Inventory.m_Root.style.display = DisplayStyle.Flex;
+            _inventoryController.m_Root.style.display = DisplayStyle.Flex;
         }
         void ShootButtonOnClick()
         {

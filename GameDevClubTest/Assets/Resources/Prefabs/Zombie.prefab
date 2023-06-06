@@ -533,8 +533,8 @@ MonoBehaviour:
   walkPointRange: 8
   timeBetweenPatrols: 4
   timeBetweenAttacks: 3
-  sightRange: 12
-  attackRange: 4
+  sightRange: 15
+  attackRange: 5
   healthBarImage: {fileID: 6562799090440576100}
 --- !u!1 &3587209567982574325
 GameObject:

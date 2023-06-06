@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8643423354831637600}
   m_Layer: 0
   m_Name: InventoryItem
-  m_TagString: Untagged
+  m_TagString: Inventory
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -61,8 +61,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item:
-    GUID: 
-    ImageName: 
+    imagePath: 
     typeSlot: 0
   Count: 0
 --- !u!61 &8764433115949839142
@@ -89,7 +88,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 6, y: 6}
+  m_Size: {x: 0.6, y: 0.6}
   m_EdgeRadius: 0
 --- !u!212 &8643423354831637600
 SpriteRenderer:

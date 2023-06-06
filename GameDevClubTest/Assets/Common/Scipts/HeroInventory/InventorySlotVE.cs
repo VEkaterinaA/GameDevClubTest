@@ -41,8 +41,8 @@ namespace Assets.Common.Scipts.HeroInventory
             slotImage = new Image();
             Add(slotImage);
             slotImage.AddToClassList("slotIcon");
-
-            slotImage.sprite = LoadSpriteFromResources.LoadSpriteFromResourcesByName(_item.imagePath);
+            var sprite = Resources.Load<Sprite>(_item.imagePath);
+            slotImage.sprite = sprite;
             item = new Item(_item.imagePath, _item.typeSlot);
 
             SetMaxCount();
@@ -111,12 +111,4 @@ namespace Assets.Common.Scipts.HeroInventory
         }
 
     }
-    public static class LoadSpriteFromResources
-    {
-        public static Sprite LoadSpriteFromResourcesByName(string ImageName)
-        {
-            return Resources.Load<Sprite>(ImageName); ;
-        }
-    }
-
 }
