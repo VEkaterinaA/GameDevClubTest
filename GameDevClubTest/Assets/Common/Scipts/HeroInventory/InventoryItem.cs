@@ -6,14 +6,16 @@ namespace Assets.Common.Scipts.HeroInventory
     {
         public Item item;
         public int Count;
-        private void Awake()
+        public void SetItem(string imahePath, TypeItem typeItem, int count)
         {
-            item = new Item();
+            item = new Item(imahePath, typeItem);
+            Count = count;
         }
-        //public string ItemName;
-        //public int Count;
-        //public string PathImage;
-        //public TypeSlot typeSlot;
+        public void SetItem(Item item, int count)
+        {
+            item = new Item(item.imagePath, item.typeSlot);
+            Count = count;
+        }
 
     }
 }

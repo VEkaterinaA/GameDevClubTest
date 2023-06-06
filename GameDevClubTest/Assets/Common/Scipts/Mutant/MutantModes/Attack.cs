@@ -11,19 +11,18 @@ namespace Assets.Common.Scipts.Mutant.MutantModes
 {
     public class Attack
     {
-        private bool alreadyAttacked;
+        private bool alreadyAttacked=true;
 
-        public IEnumerator CoroutineAttackHero(NavMeshAgent navMeshAgent, Transform transform, float timeBetweenAttacks)
+        public IEnumerator CoroutineAttackHero(HeroController heroController,NavMeshAgent navMeshAgent, Transform MutantTransform, float timeBetweenAttacks,int damage)
         {
-            navMeshAgent.SetDestination(transform.position);
+            navMeshAgent.SetDestination(MutantTransform.position);
 
-            if (!alreadyAttacked)
+            if (alreadyAttacked)
             {
-                //Attack
-
-                //
-                yield return new WaitForSeconds(timeBetweenAttacks);
                 alreadyAttacked = false;
+                heroController.TakingHeroDamage(damage);
+                yield return new WaitForSeconds(timeBetweenAttacks);
+                alreadyAttacked = true;
             }
         }
     }

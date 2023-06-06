@@ -1,5 +1,5 @@
 ﻿using Assets.Common.Infrastructure;
-using Assets.Common.Scipts.Mutant;
+using Assets.Common.Scipts.Mutant.HelperClasses;
 using System.IO;
 using UnityEngine;
 using Zenject;

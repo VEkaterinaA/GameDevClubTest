@@ -1,4 +1,5 @@
 ﻿using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -35,16 +36,15 @@ namespace Assets.Common.Scipts.HeroInventory
 
         public void HoldItem(Item _item, int count)
         {
-            item = new Item();
             AddToClassList("slotClick");
 
             slotImage = new Image();
             Add(slotImage);
             slotImage.AddToClassList("slotIcon");
 
-            slotImage.sprite = LoadSpriteFromResources.LoadSpriteFromResourcesByName(_item.ImageName);
-            item.GUID = _item.GUID;
-            item.typeSlot = _item.typeSlot;
+            slotImage.sprite = LoadSpriteFromResources.LoadSpriteFromResourcesByName(_item.imagePath);
+            item = new Item(_item.imagePath, _item.typeSlot);
+
             SetMaxCount();
             SetCount(count);
             IsEmpty = false;
@@ -69,20 +69,38 @@ namespace Assets.Common.Scipts.HeroInventory
             }
 
         }
+        public InventorySlotVE SubstractCount(int externalCount)
+        {
+            var sub = Count - externalCount;
+            if(sub>1)
+            {
+                Count = sub;
+            }
+            else if(sub==1)
+            {
+                Remove(slotLabelCount);
+                slotLabelCount = null;
+            }
+            else
+            {
+                return this;
+            }
+            return null;
+        }
         public void SetMaxCount()
         {
             switch (item.typeSlot)
             {
-                case TypeSlot.Weapon:
+                case TypeItem.Weapon:
                     MaxCount = 3;
                     break;
-                case TypeSlot.Food:
+                case TypeItem.Food:
                     MaxCount = 20;
                     break;
-                case TypeSlot.Clothes:
+                case TypeItem.Clothes:
                     MaxCount = 5;
                     break;
-                case TypeSlot.Bullet:
+                case TypeItem.Bullet:
                     MaxCount = 200;
                     break;
                 default:
@@ -95,10 +113,9 @@ namespace Assets.Common.Scipts.HeroInventory
     }
     public static class LoadSpriteFromResources
     {
-        public static string pathSpritesInventory = "Sprites/Inventory/";
         public static Sprite LoadSpriteFromResourcesByName(string ImageName)
         {
-            return Resources.Load<Sprite>(pathSpritesInventory + ImageName); ;
+            return Resources.Load<Sprite>(ImageName); ;
         }
     }
 

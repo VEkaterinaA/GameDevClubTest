@@ -1,5 +1,6 @@
 ﻿using Assets.Common.Scipts.HeroInventory;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static UnityEditor.Progress;
@@ -16,20 +17,20 @@ public class InventoryController : MonoBehaviour
 
     [HideInInspector]
     public List<InventorySlotVE> slots = new List<InventorySlotVE>();
-
+    public int CountBullet;
     private void Awake()
     {
         LoadSlots();
     }
     public void Subscribe()
     {
-        slotChangeWindow.OnUndoSlotButtonChange += OnClickUndoSlotButtonChange;
-        slotChangeWindow.OnSlotButtonRemove += OnClickSlotButtonRemove;
+        slotChangeWindow.OnUndoSlotButtonChange += UndoSlotButtonChangeOnClick;
+        slotChangeWindow.OnSlotButtonRemove += RemoveSlotButtonOnClick;
     }
     void Unsubscribe()
     {
-        slotChangeWindow.OnUndoSlotButtonChange -= OnClickUndoSlotButtonChange;
-        slotChangeWindow.OnSlotButtonRemove -= OnClickSlotButtonRemove;
+        slotChangeWindow.OnUndoSlotButtonChange -= UndoSlotButtonChangeOnClick;
+        slotChangeWindow.OnSlotButtonRemove -= RemoveSlotButtonOnClick;
     }
     public void LoadSlots()
     {
@@ -38,12 +39,7 @@ public class InventoryController : MonoBehaviour
         var CloseInventary = m_Root.Q<Button>();
         CloseInventary.clicked += () => { m_Root.style.display = DisplayStyle.None; ; };
 
-        var item0 = new Item() { ImageName = "5.45x39", typeSlot = TypeSlot.Bullet };
-        
-        slots.Add(new InventorySlotVE(this));
-        var SlotBullet = slots[0];
-        SlotBullet.HoldItem(item0, 30);
-        m_SlotContainer.Add(SlotBullet);
+        CreateSlotBullet();
 
         for (int i = 0; i < 19; i++)
         {
@@ -61,23 +57,55 @@ public class InventoryController : MonoBehaviour
         slotChangeWindow.SlotChange(inventorySlotVE);
     }
 
-    private void OnClickSlotButtonRemove()
+    private void RemoveSlotButtonOnClick()
     {
-        m_SlotContainer.Remove(SelectedInventorySlotVE);
-        slots.Remove(SelectedInventorySlotVE);
+        RemoveSlot(SelectedInventorySlotVE);
+
+        m_Root.style.display = DisplayStyle.Flex;
+        Unsubscribe();
+    }
+    private void UndoSlotButtonChangeOnClick()
+    {
+        m_Root.style.display = DisplayStyle.Flex;
+        Unsubscribe();
+
+    }
+    public void SpendItem(Item item,int count)
+    {
+        var slot = slots.FirstOrDefault(u=>u.item==item);
+        if(slot==null)
+        {
+            Debug.Log("There is no such object in the inventory");
+            return;
+        }
+        if(slot.item.typeSlot==TypeItem.Bullet)
+        {
+            CountBullet -= count;
+        }
+        var slotSub = slot.SubstractCount(count);
+        if(slotSub ==null)
+        {
+            return;
+        }
+        RemoveSlot(slotSub);
+    }
+    private void RemoveSlot(InventorySlotVE inventorySlotVE)
+    {
+        m_SlotContainer.Remove(inventorySlotVE);
+        slots.Remove(inventorySlotVE);
 
         InventorySlotVE item = new InventorySlotVE(this);
         slots.Add(item);
         m_SlotContainer.Add(item);
 
-
-        m_Root.style.display = DisplayStyle.Flex;
-        Unsubscribe();
     }
-    private void OnClickUndoSlotButtonChange()
+    private void CreateSlotBullet()
     {
-        m_Root.style.display = DisplayStyle.Flex;
-        Unsubscribe();
-
+        var itemBullet = new Item("Sprites/Inventory/Bullet/5.45x39", TypeItem.Bullet);
+        CountBullet = 30;
+        slots.Add(new InventorySlotVE(this));
+        var SlotBullet = slots[0];
+        SlotBullet.HoldItem(itemBullet, 30);
+        m_SlotContainer.Add(SlotBullet);
     }
 }

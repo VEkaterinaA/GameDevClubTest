@@ -1,7 +1,7 @@
 using Assets.Common.Infrastructure;
 using Assets.Common.Scipts.Hero;
-using Assets.Common.Scipts.Mutant;
-using Assets.Common.Scipts.Mutant.MutantModes;
+using Assets.Common.Scipts.HeroInventory;
+using Assets.Common.Scipts.Mutant.HelperClasses;
 using Cinemachine;
 using UnityEngine;
 using Zenject;
@@ -11,13 +11,15 @@ public class LocationInstaller : MonoInstaller, IInitializable
     public InventoryController inventory;
 
     public Transform StartPoint;
-    public Transform RandomCoordinateZone;
     public GameObject HeroPrefab;
     public Joystick joystick;//add joystick to the hero
     public CinemachineVirtualCamera VirtualCamera;//fill VirtualCamera.Follow
     public override void InstallBindings()
     {
+
         BindInstallerInterfaces();
+
+        BindinventoryItemDataBase();
 
         BindHeroDisplay();
 
@@ -25,6 +27,13 @@ public class LocationInstaller : MonoInstaller, IInitializable
 
         BindMutantFactory();
 
+    }
+
+    private void BindinventoryItemDataBase()
+    {
+        Container
+            .Bind<InventoryItemDataBase>()
+            .AsSingle();
     }
 
     private void BindInstallerInterfaces()
@@ -63,10 +72,10 @@ public class LocationInstaller : MonoInstaller, IInitializable
             .To<MutantFactory>()
             .AsSingle();
 
-
         Container
             .Bind<MutantPositionGeneration>()
             .AsSingle();
+;
     }
     private void HeroInterfaceSetup(HeroController heroController)
     {

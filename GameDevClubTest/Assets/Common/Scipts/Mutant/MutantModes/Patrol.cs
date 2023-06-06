@@ -8,6 +8,7 @@ using UnityEngine.AI;
 using UnityEngine;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 using UnityEngine.UIElements;
+using Assets.Common.Scipts.Mutant.HelperClasses;
 
 namespace Assets.Common.Scipts.Mutant.MutantModes
 {

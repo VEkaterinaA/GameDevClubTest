@@ -1,4 +1,4 @@
-﻿using Assets.Common.Scipts.Mutant;
+﻿using Assets.Common.Scipts.Mutant.HelperClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2494900583487744865}
-  - component: {fileID: -6880136730613824436}
+  - component: {fileID: -654692300093258408}
   m_Layer: 0
   m_Name: PlacementAreaMutant
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-6880136730613824436
+--- !u!114 &-654692300093258408
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1151334291788562953}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be8fd21cd407d29408e2be4a91310311, type: 3}
+  m_Script: {fileID: 11500000, guid: d7d7804c3c8f1f64da29e28a29d66f4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Radius: 30
+  Radius: 40

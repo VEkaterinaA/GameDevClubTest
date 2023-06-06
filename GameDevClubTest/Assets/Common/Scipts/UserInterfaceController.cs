@@ -29,13 +29,18 @@ namespace Assets.Common.Scipts
         private void Awake()
         {
             Subscribe();
+
             shootButton.SetActive(IsHeroAttack);
+            var ShootButton = shootButton.GetComponentInChildren<Button>();
+            ShootButton.onClick.AddListener(ShootButtonOnClick);
+
             Inventory.m_Root.style.display = DisplayStyle.None;
             inventoryButton.onClick.AddListener(UseInventoryOnClick);
         }
         private void Subscribe()
         {
             _heroController.OnCollisionHeroFieldWithEnemy += AttackButtonStateChange;
+            _heroController.OnHeroDeath += OpenWindowGameOver;
         }
         private void AttackButtonStateChange()
         {
@@ -46,6 +51,14 @@ namespace Assets.Common.Scipts
         void UseInventoryOnClick()
         {
             Inventory.m_Root.style.display = DisplayStyle.Flex;
+        }
+        void ShootButtonOnClick()
+        {
+            _heroController.ClickShootButton();
+        }
+        void OpenWindowGameOver()
+        {
+
         }
 
     }

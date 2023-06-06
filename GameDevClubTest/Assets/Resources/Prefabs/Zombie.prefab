@@ -506,7 +506,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 1.38
-  m_Speed: 4
+  m_Speed: 3
   m_Acceleration: 12
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -532,9 +532,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkPointRange: 8
   timeBetweenPatrols: 4
-  timeBetweenAttacks: 2
+  timeBetweenAttacks: 3
   sightRange: 12
-  attackRange: 3
+  attackRange: 4
+  healthBarImage: {fileID: 6562799090440576100}
 --- !u!1 &3587209567982574325
 GameObject:
   m_ObjectHideFlags: 0
