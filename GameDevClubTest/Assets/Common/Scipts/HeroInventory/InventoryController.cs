@@ -1,5 +1,6 @@
 ﻿using Assets.Common.Scipts;
 using Assets.Common.Scipts.HeroInventory;
+using Assets.Common.Scipts.Weapon;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,18 +14,17 @@ public class InventoryController : MonoBehaviour
     private VisualElement SlotContainerVisualElement;
     private InventorySlotVisualElement SelectedInventorySlot;
     private FileOperations _fileOperations;
-
+    public HeroWeapon _heroWeapon;
     public SlotWindow SlotWindowSceneObject;
     public VisualElement InventoryVisualRoot;
     [HideInInspector]
     public List<InventorySlotVisualElement> slots = new List<InventorySlotVisualElement>(20);
-    public event Action<int> OnChangeBulletCount;
-    public int CountBullet;
 
     [Inject]
-    private void Construct(FileOperations fileOperations)
+    private void Construct(FileOperations fileOperations, HeroWeapon heroWeapon)
     {
         _fileOperations = fileOperations;
+        _heroWeapon = heroWeapon;
     }
 
     private void Awake()
@@ -94,11 +94,6 @@ public class InventoryController : MonoBehaviour
             Debug.Log("There is no such object in the inventory");
             return;
         }
-        if (slot.item.typeItem == TypeItem.Bullet)
-        {
-            ChangeBulletCount(CountBullet - count);
-
-        }
         var slotSub = slot.SubstractCount(count);
         if (slotSub == null)
         {
@@ -125,15 +120,6 @@ public class InventoryController : MonoBehaviour
     }
     private void InitSlots()
     {
-        //var itemBullet = CreateItem("Sprites/Inventory/Bullet/5.45x39", TypeItem.Bullet);
-
-        //var newSlot = new InventorySlotVisualElement(this);
-
-        //newSlot.SetItem(itemBullet, 30);
-        //slots.Add(newSlot);
-        //SlotContainerVisualElement.Add(newSlot);
-        //ChangeBulletCount(newSlot.Count);
-
         for (int i = 0; i < 20; i++)
         {
             InventorySlotVisualElement item = new InventorySlotVisualElement(this);
@@ -141,6 +127,32 @@ public class InventoryController : MonoBehaviour
             SlotContainerVisualElement.Add(item);
         }
         _fileOperations.LoadInventory(slots);
+        BulletSlot();
+
+    }
+
+    private void BulletSlot()
+    {
+        var slotBullet = slots.FirstOrDefault(u => u.item!=null && u.item.typeItem == TypeItem.Bullet);
+        if (slotBullet == null)
+        {
+            var emptySlot = slots.FirstOrDefault(u => u.IsEmpty == true);
+            if (emptySlot == null)
+            {
+                return;
+            }
+            FillEmptySlotBulletDefault(emptySlot);
+            _heroWeapon.InitBullet(emptySlot);
+            return;
+        }
+        _heroWeapon.InitBullet(slotBullet);
+    }
+
+    private void FillEmptySlotBulletDefault(InventorySlotVisualElement emptySlot)
+    {
+        emptySlot.item = CreateItem("Assets/Resources/Sprites/Inventory/Bullet/5.45x39", TypeItem.Bullet);
+        emptySlot.IsEmpty = false;
+        emptySlot.Count = 30;
     }
 
     private Item CreateItem(string sprite, TypeItem type)
@@ -164,10 +176,6 @@ public class InventoryController : MonoBehaviour
             if (firstEmptySlot != null)
             {
                 firstEmptySlot.SetItem(item, inventoryItem.Count);
-                if (item.typeItem == TypeItem.Bullet)
-                {
-                    ChangeBulletCount(inventoryItem.Count);
-                }
                 return;
             }
             else
@@ -179,18 +187,8 @@ public class InventoryController : MonoBehaviour
         else
         {
             slot.SetCount(inventoryItem.Count);
-            if (item.typeItem == TypeItem.Bullet)
-            {
-                ChangeBulletCount(slot.Count);
-            }
-
             return;
         }
 
-    }
-    public void ChangeBulletCount(int count)
-    {
-        CountBullet = count;
-        OnChangeBulletCount?.Invoke(CountBullet);
     }
 }

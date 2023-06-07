@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Common.Scipts.Weapon;
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using Zenject;
@@ -38,12 +39,12 @@ namespace Assets.Common.Scipts
         {
             _heroController.OnCollisionHeroFieldWithEnemy += AttackButtonStateChange;
             _heroController.OnHeroDeath += OpenWindowGameOver;
-            _inventoryController.OnChangeBulletCount += (int countBullet) => UpdateCountBulletLabel(countBullet);
+            _inventoryController._heroWeapon.OnChangeBulletCount += UpdateCountBulletLabel;
         }
 
-        private void UpdateCountBulletLabel(int countBullet)
+        private void UpdateCountBulletLabel()
         {
-            textBulletCount.text = countBullet.ToString();
+            textBulletCount.text = _inventoryController._heroWeapon.CountBullet.ToString();
         }
 
         private void AttackButtonStateChange()

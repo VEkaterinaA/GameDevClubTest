@@ -10,7 +10,20 @@ namespace Assets.Common.Scipts.HeroInventory
         public Item item;
         public Image slotImage;
         public Label slotLabelCount;
-        public int Count;
+        [SerializeField]private int count;
+        public int Count
+        {
+            get
+            {
+                return count;
+            }
+            set
+            {
+                count = value;
+                if(slotLabelCount!=null)
+                slotLabelCount.text = Count.ToString();
+            }
+        }
         [NonSerialized]
         public int MaxCount;
         public bool IsEmpty;
@@ -70,10 +83,6 @@ namespace Assets.Common.Scipts.HeroInventory
                     Add(slotLabelCount);
                     slotLabelCount.AddToClassList("slotLabel");
                 }
-                else
-                {
-                    slotLabelCount.text = Count.ToString();
-                }
             }
 
         }
@@ -83,7 +92,6 @@ namespace Assets.Common.Scipts.HeroInventory
             if (sub > 1)
             {
                 Count = sub;
-                slotLabelCount.text = Count.ToString();
             }
             else if (sub == 1)
             {

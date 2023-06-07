@@ -3,6 +3,7 @@ using Assets.Common.Scipts.CommonForHeroAndMutantsScripts;
 using Assets.Common.Scipts.Hero;
 using Assets.Common.Scipts.Hero.HelperClasses;
 using Assets.Common.Scipts.HeroInventory;
+using Assets.Common.Scipts.Weapon;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +14,13 @@ using Zenject;
 public class HeroController : MonoBehaviour
 {
     //Classes
-    public InventoryController inventory;
     private HeroMove _heroMove;
-    public HeroCharacteristics _heroCharacteristics;
     private HealthBar _healthBar;
     private FileOperations _data;
+    public HeroWeapon _heroWeapon;
+    public InventoryController inventory;
+    public HeroCharacteristics _heroCharacteristics;
+
     [HideInInspector]
     public Joystick joystick;
     //Body
@@ -48,6 +51,7 @@ public class HeroController : MonoBehaviour
         LoadHelperClasses();
 
         RigidbodyHero = GetComponent<Rigidbody2D>();
+
     }
     private void Update()
     {
@@ -157,7 +161,7 @@ public class HeroController : MonoBehaviour
     }
     public void Attack()
     {
-        if (inventory.CountBullet == 0)
+        if (_heroWeapon.CountBullet == 0)
         {
             return;
         }
@@ -165,9 +169,9 @@ public class HeroController : MonoBehaviour
         if (IsShoot == false)
         {
             IsShoot = true;
+            _heroWeapon.SubstractBullet();
             var mutant = TrackedMutantTransform.GetComponent<MutantAI>();
             mutant._mutantHealth.TakeDamage(_heroCharacteristics.damage);
-            inventory.SubstractItem(inventory.slots[0].item, 1);
             IsShoot = false;
         }
     }
@@ -195,7 +199,6 @@ public class HeroController : MonoBehaviour
     {
         _heroCharacteristics = new HeroCharacteristics(transform);
         _data.LoadHeroCharacteristics(_heroCharacteristics);
-
         _heroMove = new HeroMove();
         _healthBar = new HealthBar(_heroCharacteristics.health, _heroCharacteristics.health, HealthBar);
     }

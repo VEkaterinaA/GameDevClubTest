@@ -1,0 +1,164 @@
+{
+    "slots": [
+        {
+            "item": {
+                "imagePath": "Assets/Resources/Sprites/Inventory/Bullet/5.45x39",
+                "typeItem": 4
+            },
+            "count": 30,
+            "IsEmpty": false
+        },
+        {
+            "item": {
+                "imagePath": "",
+                "typeItem": 0
+            },
+            "count": 0,
+            "IsEmpty": true
+        },
+        {
+            "item": {
+                "imagePath": "",
+                "typeItem": 0
+            },
+            "count": 0,
+            "IsEmpty": true
+        },
+        {
+            "item": {
+                "imagePath": "",
+                "typeItem": 0
+            },
+            "count": 0,
+            "IsEmpty": true
+        },
+        {
+            "item": {
+                "imagePath": "",
+                "typeItem": 0
+            },
+            "count": 0,
+            "IsEmpty": true
+        },
+        {
+            "item": {
+                "imagePath": "",
+                "typeItem": 0
+            },
+            "count": 0,
+            "IsEmpty": true
+        },
+        {
+            "item": {
+                "imagePath": "",
+                "typeItem": 0
+            },
+            "count": 0,
+            "IsEmpty": true
+        },
+        {
+            "item": {
+                "imagePath": "",
+                "typeItem": 0
+            },
+            "count": 0,
+            "IsEmpty": true
+        },
+        {
+            "item": {
+                "imagePath": "",
+                "typeItem": 0
+            },
+            "count": 0,
+            "IsEmpty": true
+        },
+        {
+            "item": {
+                "imagePath": "",
+                "typeItem": 0
+            },
+            "count": 0,
+            "IsEmpty": true
+        },
+        {
+            "item": {
+                "imagePath": "",
+                "typeItem": 0
+            },
+            "count": 0,
+            "IsEmpty": true
+        },
+        {
+            "item": {
+                "imagePath": "",
+                "typeItem": 0
+            },
+            "count": 0,
+            "IsEmpty": true
+        },
+        {
+            "item": {
+                "imagePath": "",
+                "typeItem": 0
+            },
+            "count": 0,
+            "IsEmpty": true
+        },
+        {
+            "item": {
+                "imagePath": "",
+                "typeItem": 0
+            },
+            "count": 0,
+            "IsEmpty": true
+        },
+        {
+            "item": {
+                "imagePath": "",
+                "typeItem": 0
+            },
+            "count": 0,
+            "IsEmpty": true
+        },
+        {
+            "item": {
+                "imagePath": "",
+                "typeItem": 0
+            },
+            "count": 0,
+            "IsEmpty": true
+        },
+        {
+            "item": {
+                "imagePath": "",
+                "typeItem": 0
+            },
+            "count": 0,
+            "IsEmpty": true
+        },
+        {
+            "item": {
+                "imagePath": "",
+                "typeItem": 0
+            },
+            "count": 0,
+            "IsEmpty": true
+        },
+        {
+            "item": {
+                "imagePath": "",
+                "typeItem": 0
+            },
+            "count": 0,
+            "IsEmpty": true
+        },
+        {
+            "item": {
+                "imagePath": "",
+                "typeItem": 0
+            },
+            "count": 0,
+            "IsEmpty": true
+        }
+    ]
+}

@@ -125,7 +125,6 @@ namespace Assets.Common.Scipts
             {
                 Debug.Log("LoadInventory error: " + e.Message);
             }
-
         }
 
     }

@@ -3,6 +3,7 @@ using Assets.Common.Scipts;
 using Assets.Common.Scipts.Hero;
 using Assets.Common.Scipts.HeroInventory;
 using Assets.Common.Scipts.Mutant.HelperClasses;
+using Assets.Common.Scipts.Weapon;
 using Cinemachine;
 using UnityEngine;
 using Zenject;
@@ -25,11 +26,20 @@ public class LocationInstaller : MonoInstaller, IInitializable
         BindinventoryItemDataBase();
 
         BindHeroDisplay();
+        
+        BindHeroWeapon();
 
         BindHero();
 
         BindMutantFactory();
 
+    }
+
+    private void BindHeroWeapon()
+    {
+        Container
+            .Bind<HeroWeapon>()
+            .AsSingle();
     }
 
     private void BindData()
