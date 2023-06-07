@@ -1,11 +1,12 @@
 ﻿using Assets.Common.Scipts.HeroInventory;
 using System;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SlotChangeWindow : MonoBehaviour
+public class SlotWindow : MonoBehaviour
 {
+    private InventorySlotVisualElement _item;
+
     public event Action OnUndoSlotButtonChange;
     public event Action OnSlotButtonRemove;
 
@@ -17,12 +18,12 @@ public class SlotChangeWindow : MonoBehaviour
     private void Awake()
     {
         CloseButton.onClick.AddListener(OnClickUndoSlotButtonChange);
-        DeleteButton.onClick.AddListener(() => OnClickSlotButtonRemove());
+        DeleteButton.onClick.AddListener(OnClickSlotButtonRemove);
     }
     private void OnClickUndoSlotButtonChange()
     {
-            OnUndoSlotButtonChange?.Invoke();
-            gameObject.SetActive(false);
+        OnUndoSlotButtonChange?.Invoke();
+        gameObject.SetActive(false);
     }
     private void OnClickSlotButtonRemove()
     {
@@ -30,7 +31,7 @@ public class SlotChangeWindow : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void SlotChange(InventorySlotVE inventorySlotVE)
+    public void ChangeSlot(InventorySlotVisualElement inventorySlotVE)
     {
         Image.sprite = inventorySlotVE.slotImage.sprite;
         Image.type = Image.Type.Simple;

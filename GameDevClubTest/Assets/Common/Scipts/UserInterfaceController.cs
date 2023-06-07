@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using Zenject;
@@ -16,15 +11,16 @@ namespace Assets.Common.Scipts
         public Button inventoryButton;
         public GameObject shootButton;
         public Text textBulletCount;
-
+        private FileOperations _data;
         public InventoryController _inventoryController;
         private HeroController _heroController;
 
         private bool IsHeroAttack = false;
         [Inject]
-        private void Contruct(HeroController heroController)
+        private void Contruct(HeroController heroController, FileOperations data)
         {
             _heroController = heroController;
+            _data = data;
         }
         private void Awake()
         {
@@ -34,14 +30,15 @@ namespace Assets.Common.Scipts
             var ShootButton = shootButton.GetComponentInChildren<Button>();
             ShootButton.onClick.AddListener(ShootButtonOnClick);
 
-            _inventoryController.m_Root.style.display = DisplayStyle.None;
+            _inventoryController.InventoryVisualRoot.style.display = DisplayStyle.None;
             inventoryButton.onClick.AddListener(UseInventoryOnClick);
+
         }
         private void Subscribe()
         {
             _heroController.OnCollisionHeroFieldWithEnemy += AttackButtonStateChange;
             _heroController.OnHeroDeath += OpenWindowGameOver;
-            _inventoryController.OnDropBullet += (int countBullet) => UpdateCountBulletLabel(countBullet);
+            _inventoryController.OnChangeBulletCount += (int countBullet) => UpdateCountBulletLabel(countBullet);
         }
 
         private void UpdateCountBulletLabel(int countBullet)
@@ -57,15 +54,19 @@ namespace Assets.Common.Scipts
 
         void UseInventoryOnClick()
         {
-            _inventoryController.m_Root.style.display = DisplayStyle.Flex;
+            _inventoryController.InventoryVisualRoot.style.display = DisplayStyle.Flex;
         }
         void ShootButtonOnClick()
         {
-            _heroController.ClickShootButton();
+            _heroController.Shoot();
         }
         void OpenWindowGameOver()
         {
 
+        }
+        private void OnApplicationQuit()
+        {
+            _data.SaveToFile(_inventoryController.slots, _heroController._heroCharacteristics);
         }
 
     }

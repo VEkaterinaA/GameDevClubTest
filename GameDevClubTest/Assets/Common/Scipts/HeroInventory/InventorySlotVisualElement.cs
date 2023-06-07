@@ -1,21 +1,22 @@
 ﻿using System;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Assets.Common.Scipts.HeroInventory
 {
-    public class InventorySlotVE : VisualElement
+    [Serializable]
+    public class InventorySlotVisualElement : VisualElement
     {
         public Item item;
         public Image slotImage;
         public Label slotLabelCount;
         public int Count;
+        [NonSerialized]
         public int MaxCount;
         public bool IsEmpty;
         private InventoryController _inventoryController;
 
-        public InventorySlotVE(InventoryController inventoryController)
+        public InventorySlotVisualElement(InventoryController inventoryController)
         {
 
             _inventoryController = inventoryController;
@@ -27,14 +28,14 @@ namespace Assets.Common.Scipts.HeroInventory
         }
         private void OnPointerDown(PointerDownEvent evt)
         {
-            if (evt.button != 0 || IsEmpty==true)
+            if (evt.button != 0 || IsEmpty == true)
             {
                 return;
             }
-            _inventoryController.SlotChange(this);
+            _inventoryController.OpenSlotWindow(this);
         }
 
-        public void HoldItem(Item _item, int count)
+        public void SetItem(Item _item, int count)
         {
             AddToClassList("slotClick");
 
@@ -43,7 +44,7 @@ namespace Assets.Common.Scipts.HeroInventory
             slotImage.AddToClassList("slotIcon");
             var sprite = Resources.Load<Sprite>(_item.imagePath);
             slotImage.sprite = sprite;
-            item = new Item(_item.imagePath, _item.typeSlot);
+            item = new Item(_item.imagePath, _item.typeItem);
 
             SetMaxCount();
             SetCount(count);
@@ -51,7 +52,7 @@ namespace Assets.Common.Scipts.HeroInventory
         }
         public void SetCount(int externalCount)
         {
-            var sum = Count + externalCount;
+            int sum = Count + externalCount;
             if (sum < MaxCount)
             {
                 Count = sum;
@@ -62,22 +63,31 @@ namespace Assets.Common.Scipts.HeroInventory
             }
             if (Count > 1)
             {
-                slotLabelCount = new Label();
-                slotLabelCount.text = Count.ToString();
-                Add(slotLabelCount);
-                slotLabelCount.AddToClassList("slotLabel");
+                if (slotLabelCount == null)
+                {
+                    slotLabelCount = new Label();
+                    slotLabelCount.text = Count.ToString();
+                    Add(slotLabelCount);
+                    slotLabelCount.AddToClassList("slotLabel");
+                }
+                else
+                {
+                    slotLabelCount.text = Count.ToString();
+                }
             }
 
         }
-        public InventorySlotVE SubstractCount(int externalCount)
+        public InventorySlotVisualElement SubstractCount(int externalCount)
         {
             var sub = Count - externalCount;
-            if(sub>1)
+            if (sub > 1)
             {
                 Count = sub;
+                slotLabelCount.text = Count.ToString();
             }
-            else if(sub==1)
+            else if (sub == 1)
             {
+                Count = sub;
                 Remove(slotLabelCount);
                 slotLabelCount = null;
             }
@@ -89,7 +99,7 @@ namespace Assets.Common.Scipts.HeroInventory
         }
         public void SetMaxCount()
         {
-            switch (item.typeSlot)
+            switch (item.typeItem)
             {
                 case TypeItem.Weapon:
                     MaxCount = 3;
@@ -109,6 +119,5 @@ namespace Assets.Common.Scipts.HeroInventory
             }
 
         }
-
     }
 }

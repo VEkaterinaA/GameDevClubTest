@@ -4,7 +4,9 @@ namespace Assets.Common.Scipts.Mutant.HelperClasses
 {
     public class MutantTurn
     {
-        public void RotationMutantRelativeToMovement(Vector3 velocity, Transform transform, Vector3 walkPoint)
+        public float startMutantPosX;
+        public Transform transform;
+        public void RotationMutantRelativeToMovement(Vector3 velocity)
         {
             if (velocity.x < 0)
             {

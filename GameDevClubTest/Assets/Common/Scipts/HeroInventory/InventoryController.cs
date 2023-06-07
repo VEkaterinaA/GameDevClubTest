@@ -1,119 +1,196 @@
-﻿using Assets.Common.Scipts.HeroInventory;
+﻿using Assets.Common.Scipts;
+using Assets.Common.Scipts.HeroInventory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEditor.Progress;
+using Zenject;
 using Item = Assets.Common.Scipts.HeroInventory.Item;
 
 public class InventoryController : MonoBehaviour
 {
-    public SlotChangeWindow slotChangeWindow;
-    [HideInInspector]
-    public VisualElement m_Root;
-    private VisualElement m_SlotContainer;
+    private VisualElement SlotContainerVisualElement;
+    private InventorySlotVisualElement SelectedInventorySlot;
+    private FileOperations _fileOperations;
 
-    private InventorySlotVE SelectedInventorySlotVE;
-
+    public SlotWindow SlotWindowSceneObject;
+    public VisualElement InventoryVisualRoot;
     [HideInInspector]
-    public List<InventorySlotVE> slots = new List<InventorySlotVE>();
-    public event Action<int> OnDropBullet;
+    public List<InventorySlotVisualElement> slots = new List<InventorySlotVisualElement>(20);
+    public event Action<int> OnChangeBulletCount;
     public int CountBullet;
+
+    [Inject]
+    private void Construct(FileOperations fileOperations)
+    {
+        _fileOperations = fileOperations;
+    }
+
     private void Awake()
     {
-        LoadSlotComponents();
+        LoadInventoryMainWindow();
+        LoadSlotContainerComponent();
+        InitCloseButton();
     }
     private void Start()
     {
-        CreateSlots();
+        InitSlots();
     }
-    public void Subscribe()
+    private void InitSubscribtions()
     {
-        slotChangeWindow.OnUndoSlotButtonChange += UndoSlotButtonChangeOnClick;
-        slotChangeWindow.OnSlotButtonRemove += RemoveSlotButtonOnClick;
+        SlotWindowSceneObject.OnUndoSlotButtonChange += UndoSlotButtonChangeOnClick;
+        SlotWindowSceneObject.OnSlotButtonRemove += RemoveSlotButtonOnClick;
     }
-    void Unsubscribe()
+    private void Unsubscribe()
     {
-        slotChangeWindow.OnUndoSlotButtonChange -= UndoSlotButtonChangeOnClick;
-        slotChangeWindow.OnSlotButtonRemove -= RemoveSlotButtonOnClick;
+        SlotWindowSceneObject.OnUndoSlotButtonChange -= UndoSlotButtonChangeOnClick;
+        SlotWindowSceneObject.OnSlotButtonRemove -= RemoveSlotButtonOnClick;
     }
-    public void LoadSlotComponents()
+    private void LoadSlotContainerComponent()
     {
-        m_Root = GetComponent<UIDocument>().rootVisualElement;
-        m_SlotContainer = m_Root.Q<VisualElement>("SlotContainer");
-        var CloseInventary = m_Root.Q<Button>();
-        CloseInventary.clicked += () => { m_Root.style.display = DisplayStyle.None; ; };
+        SlotContainerVisualElement = InventoryVisualRoot.Q<VisualElement>("SlotContainer");
     }
-    public void SlotChange(InventorySlotVE inventorySlotVE)
+    private void LoadInventoryMainWindow()
     {
-        SelectedInventorySlotVE = inventorySlotVE;
-        m_Root.style.display = DisplayStyle.None;
-        slotChangeWindow.gameObject.SetActive(true);
-        Subscribe();
-        slotChangeWindow.SlotChange(inventorySlotVE);
+        InventoryVisualRoot = GetComponent<UIDocument>().rootVisualElement;
+    }
+    private void InitCloseButton()
+    {
+        var CloseInventary = InventoryVisualRoot.Q<Button>();
+        CloseInventary.clicked += () => { InventoryVisualRoot.style.display = DisplayStyle.None; };
     }
 
+    public void OpenSlotWindow(InventorySlotVisualElement inventorySlotVE)
+    {
+        SelectedInventorySlot = inventorySlotVE;
+        ChangeInventoryWindowDisplayStyle(DisplayStyle.None);
+        SlotWindowSceneObject.gameObject.SetActive(true);
+        InitSubscribtions();
+        SlotWindowSceneObject.ChangeSlot(inventorySlotVE);
+    }
+    private void ChangeInventoryWindowDisplayStyle(DisplayStyle style)
+    {
+        InventoryVisualRoot.style.display = style;
+    }
     private void RemoveSlotButtonOnClick()
     {
-        RemoveSlot(SelectedInventorySlotVE);
+        RemoveSlot(SelectedInventorySlot);
 
-        m_Root.style.display = DisplayStyle.Flex;
+        InventoryVisualRoot.style.display = DisplayStyle.Flex;
         Unsubscribe();
     }
     private void UndoSlotButtonChangeOnClick()
     {
-        m_Root.style.display = DisplayStyle.Flex;
+        InventoryVisualRoot.style.display = DisplayStyle.Flex;
         Unsubscribe();
 
     }
-    public void SpendItem(Item item,int count)
+    public void SubstractItem(Item item, int count)
     {
-        var slot = slots.FirstOrDefault(u=>u.item==item);
-        if(slot==null)
+        var slot = slots.FirstOrDefault(u => u.item == item);
+        if (slot == null)
         {
             Debug.Log("There is no such object in the inventory");
             return;
         }
-        if(slot.item.typeSlot==TypeItem.Bullet)
+        if (slot.item.typeItem == TypeItem.Bullet)
         {
-            CountBullet -= count;
-            OnDropBullet?.Invoke(CountBullet);
+            ChangeBulletCount(CountBullet - count);
 
         }
         var slotSub = slot.SubstractCount(count);
-        if(slotSub ==null)
+        if (slotSub == null)
         {
             return;
         }
         RemoveSlot(slotSub);
     }
-    private void RemoveSlot(InventorySlotVE inventorySlotVE)
+    private void RemoveSlot(InventorySlotVisualElement inventorySlotVE)
     {
-        m_SlotContainer.Remove(inventorySlotVE);
+        SlotContainerVisualElement.Remove(inventorySlotVE);
         slots.Remove(inventorySlotVE);
 
-        InventorySlotVE item = new InventorySlotVE(this);
-        slots.Add(item);
-        m_SlotContainer.Add(item);
+        InventorySlotVisualElement item = new InventorySlotVisualElement(this);
+        //slots.Add(item);
+        slots.Sort((u, v) =>
+        {
+            if (!u.IsEmpty && !v.IsEmpty)//
+                return 0;
+
+            return u.IsEmpty.CompareTo(v.IsEmpty) == -1 ? -1 : 1;
+        });
+        SlotContainerVisualElement.Add(item);
 
     }
-    private void CreateSlots()
+    private void InitSlots()
     {
-        var itemBullet = new Item("Sprites/Inventory/Bullet/5.45x39", TypeItem.Bullet);
-        CountBullet = 30;
-        OnDropBullet?.Invoke(CountBullet);
-        slots.Add(new InventorySlotVE(this));
-        var SlotBullet = slots[0];
-        SlotBullet.HoldItem(itemBullet, 30);
-        m_SlotContainer.Add(SlotBullet);
+        //var itemBullet = CreateItem("Sprites/Inventory/Bullet/5.45x39", TypeItem.Bullet);
 
-        for (int i = 0; i < 19; i++)
+        //var newSlot = new InventorySlotVisualElement(this);
+
+        //newSlot.SetItem(itemBullet, 30);
+        //slots.Add(newSlot);
+        //SlotContainerVisualElement.Add(newSlot);
+        //ChangeBulletCount(newSlot.Count);
+
+        for (int i = 0; i < 20; i++)
         {
-            InventorySlotVE item = new InventorySlotVE(this);
+            InventorySlotVisualElement item = new InventorySlotVisualElement(this);
             slots.Add(item);
-            m_SlotContainer.Add(item);
+            SlotContainerVisualElement.Add(item);
+        }
+        _fileOperations.LoadInventory(slots);
+    }
+
+    private Item CreateItem(string sprite, TypeItem type)
+    {
+        return new Item(sprite, type);
+    }
+
+    public void PickUpItem(InventoryItem inventoryItem)
+    {
+        if (inventoryItem == null)
+        {
+            return;
+        }
+        var item = inventoryItem.item;
+        Debug.Log(item.imagePath + "->" + item.typeItem);
+        var slot = slots.FirstOrDefault(u => u.IsEmpty != true && (u.item.imagePath == item.imagePath && u.item.typeItem == item.typeItem));
+        if (slot == null)
+        {
+            var firstEmptySlot = slots.FirstOrDefault(u => u.IsEmpty == true);
+
+            if (firstEmptySlot != null)
+            {
+                firstEmptySlot.SetItem(item, inventoryItem.Count);
+                if (item.typeItem == TypeItem.Bullet)
+                {
+                    ChangeBulletCount(inventoryItem.Count);
+                }
+                return;
+            }
+            else
+            {
+                Debug.Log("Inventory is full!");
+                return;
+            }
+        }
+        else
+        {
+            slot.SetCount(inventoryItem.Count);
+            if (item.typeItem == TypeItem.Bullet)
+            {
+                ChangeBulletCount(slot.Count);
+            }
+
+            return;
         }
 
+    }
+    public void ChangeBulletCount(int count)
+    {
+        CountBullet = count;
+        OnChangeBulletCount?.Invoke(CountBullet);
     }
 }

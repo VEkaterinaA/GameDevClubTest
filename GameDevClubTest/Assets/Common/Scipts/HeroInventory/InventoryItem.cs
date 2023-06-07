@@ -15,7 +15,7 @@ namespace Assets.Common.Scipts.HeroInventory
         }
         public void SetItem(Item item, int count)
         {
-            this.item = new Item(item.imagePath, item.typeSlot);
+            this.item = new Item(item.imagePath, item.typeItem);
             Count = count;
         }
 

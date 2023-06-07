@@ -1,4 +1,5 @@
 using Assets.Common.Infrastructure;
+using Assets.Common.Scipts;
 using Assets.Common.Scipts.Hero;
 using Assets.Common.Scipts.HeroInventory;
 using Assets.Common.Scipts.Mutant.HelperClasses;
@@ -19,6 +20,8 @@ public class LocationInstaller : MonoInstaller, IInitializable
 
         BindInstallerInterfaces();
 
+        BindData();
+
         BindinventoryItemDataBase();
 
         BindHeroDisplay();
@@ -27,6 +30,13 @@ public class LocationInstaller : MonoInstaller, IInitializable
 
         BindMutantFactory();
 
+    }
+
+    private void BindData()
+    {
+        Container
+            .Bind<FileOperations>()
+            .AsSingle();
     }
 
     private void BindinventoryItemDataBase()
@@ -51,7 +61,6 @@ public class LocationInstaller : MonoInstaller, IInitializable
             .FromInstance(joystick)
             .AsSingle();
     }
-
     private void BindHero()
     {
         HeroController heroController = Container

@@ -9,6 +9,7 @@ using UnityEngine;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 using UnityEngine.UIElements;
 using Assets.Common.Scipts.Mutant.HelperClasses;
+using Transform = UnityEngine.Transform;
 
 namespace Assets.Common.Scipts.Mutant.MutantModes
 {
@@ -16,10 +17,9 @@ namespace Assets.Common.Scipts.Mutant.MutantModes
     {
         private Vector2 walkPoint;
         bool walkPointSet;
-        public IEnumerator CoroutinePatroling(MutantTurn mutantTurn,NavMeshAgent navMeshAgent,Vector2 PointPositiontOfRandomPointSearchArea,float timeBetweenPatrols, float walkPointRange, MutantPositionGeneration _mutantPositionGeneration)
+        public IEnumerator CoroutinePatroling(MutantTurn mutantTurn,NavMeshAgent navMeshAgent, Vector2 PointPositiontOfRandomPointSearchArea,
+                                              float timeBetweenPatrols, float walkPointRange, MutantPositionGeneration _mutantPositionGeneration)
         {
-            var MutantTransformScale = navMeshAgent.transform.localScale;
-            var MutantPositionX = navMeshAgent.transform.position.x;
             if (navMeshAgent == null)
             {
                yield return null;
@@ -33,7 +33,7 @@ namespace Assets.Common.Scipts.Mutant.MutantModes
                 if (walkPointSet)
                 {
                     navMeshAgent.SetDestination(walkPoint);
-                    mutantTurn.RotationMutantRelativeToMovement(navMeshAgent.velocity, navMeshAgent.transform, walkPoint);
+                    mutantTurn.RotationMutantRelativeToMovement(navMeshAgent.velocity);
 
                 }
                 Vector2 distanceToWalkPoint = PointPositiontOfRandomPointSearchArea - walkPoint;

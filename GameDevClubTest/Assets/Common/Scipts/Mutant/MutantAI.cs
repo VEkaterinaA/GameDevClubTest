@@ -1,22 +1,19 @@
+using Assets.Common.Scipts.HeroInventory;
+using Assets.Common.Scipts.Mutant.HelperClasses;
 using Assets.Common.Scipts.Mutant.MutantModes;
-using System.Collections;
-using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using Zenject;
-using Random = UnityEngine.Random;
-using Assets.Common.Scipts.Mutant.HelperClasses;
-using Unity.VisualScripting;
-using Assets.Common.Scipts.HeroInventory;
-using System;
-using Object = UnityEngine.Object;
 using UnityEngine.UI;
+using Zenject;
+using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
 
 public class MutantAI : MonoBehaviour
 {
     private NavMeshAgent navMeshAgent;
     //Classes
-    public MutantTakingDamage _mutantTakingDamage;
+    public MutantHealthManagement _mutantHealth;
     private HeroController _heroController;
     private Attack _attack;
     private MutantPositionGeneration _mutantPositionGeneration;
@@ -34,7 +31,9 @@ public class MutantAI : MonoBehaviour
     public float sightRange, attackRange;
 
     public Image healthBarImage;
+    public Transform MutantBody;
 
+    private float StartMutantPosX;
     private Vector2 randomPoint;
 
     [Inject]
@@ -46,6 +45,7 @@ public class MutantAI : MonoBehaviour
     }
     private void Start()
     {
+        StartMutantPosX = MutantBody.position.x;
 
         LoadNavMesh();
 
@@ -58,33 +58,33 @@ public class MutantAI : MonoBehaviour
     private void Update()
     {
         Vector2 distanceToWalkPoint = transform.position - _heroController.transform.position;
-        
-        if(distanceToWalkPoint.x < sightRange && distanceToWalkPoint.y < sightRange)
+
+        if (distanceToWalkPoint.x < sightRange & distanceToWalkPoint.y < sightRange)
         {
             StopCoroutine(nameof(_patrol.CoroutinePatroling));
 
-            if(distanceToWalkPoint.x < attackRange && distanceToWalkPoint.y < attackRange)
+            if (distanceToWalkPoint.x < attackRange & distanceToWalkPoint.y < attackRange)
             {
-                StartCoroutine((_attack.CoroutineAttackHero(_heroController,navMeshAgent,transform,timeBetweenAttacks, _mutantCharacteristics.damage)));
+                StartCoroutine((_attack.CoroutineAttackHero(_heroController, navMeshAgent, transform, timeBetweenAttacks, _mutantCharacteristics.damage)));
             }
             else
             {
-                _chase.ChaseHero(_mutantTurn,navMeshAgent,_heroController.transform.position);
+                _chase.ChaseHero(_mutantTurn, navMeshAgent, _heroController.transform.position);
             }
         }
         else
         {
             StopCoroutine(nameof(_attack.CoroutineAttackHero));
-            StartCoroutine((_patrol.CoroutinePatroling(_mutantTurn, navMeshAgent,transform.position,timeBetweenPatrols,walkPointRange,_mutantPositionGeneration)));
+            StartCoroutine((_patrol.CoroutinePatroling(_mutantTurn, navMeshAgent, transform.position, timeBetweenPatrols, walkPointRange, _mutantPositionGeneration)));
         }
     }
     private void Subscribe()
     {
-        _mutantTakingDamage.OnMutantDie += MutantDie;
+        _mutantHealth.OnMutantDie += MutantDie;
     }
     private void Unsubscribe()
     {
-        _mutantTakingDamage.OnMutantDie -= MutantDie;
+        _mutantHealth.OnMutantDie -= MutantDie;
     }
     private void SettingPositionMutant()
     {
@@ -105,8 +105,8 @@ public class MutantAI : MonoBehaviour
     private void LoadMutantHelperClasses()
     {
         _mutantCharacteristics = new MutantCharacteristics();
-        _mutantTakingDamage = new MutantTakingDamage(_mutantCharacteristics, healthBarImage);
-        _mutantTurn = new MutantTurn();
+        _mutantHealth = new MutantHealthManagement(_mutantCharacteristics, healthBarImage);
+        _mutantTurn = new MutantTurn() { startMutantPosX = StartMutantPosX, transform = MutantBody.transform };
         Subscribe();
     }
     private void MutantDie()
