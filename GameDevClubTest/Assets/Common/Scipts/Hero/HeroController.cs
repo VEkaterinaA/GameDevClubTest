@@ -49,7 +49,7 @@ public class HeroController : MonoBehaviour
     }
     private void Start()
     {
-        LoadHelperClasses();
+        InitHelperClasses();
 
         RigidbodyHero = GetComponent<Rigidbody2D>();
 
@@ -185,7 +185,7 @@ public class HeroController : MonoBehaviour
         ElbowRotation.rotation = Quaternion.Euler(0, 0, angle);
 
     }
-    public void TakingHeroDamage(int damage)
+    public void SetDamage(int damage)
     {
         _heroCharacteristics.TakingDamage(damage);
 
@@ -194,7 +194,7 @@ public class HeroController : MonoBehaviour
             OnHeroDeath?.Invoke();
         }
     }
-    private void LoadHelperClasses()
+    private void InitHelperClasses()
     {
         _heroCharacteristics = new HeroCharacteristics(transform, HealthBar);
         _data.LoadHeroCharacteristics(_heroCharacteristics);

@@ -2,7 +2,7 @@
 
 namespace Assets.Common.Scipts.Mutant.HelperClasses
 {
-    public class MutantTurn
+    public class MutantControl
     {
         public float startMutantPosX;
         public Transform transform;

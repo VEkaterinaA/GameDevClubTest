@@ -1,15 +1,7 @@
-﻿using System;
+﻿using Assets.Common.Scipts.Mutant.HelperClasses;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine.AI;
 using UnityEngine;
-using static UnityEngine.RuleTile.TilingRuleOutput;
-using UnityEngine.UIElements;
-using Assets.Common.Scipts.Mutant.HelperClasses;
-using Transform = UnityEngine.Transform;
+using UnityEngine.AI;
 
 namespace Assets.Common.Scipts.Mutant.MutantModes
 {
@@ -17,12 +9,12 @@ namespace Assets.Common.Scipts.Mutant.MutantModes
     {
         private Vector2 walkPoint;
         bool walkPointSet;
-        public IEnumerator CoroutinePatroling(MutantTurn mutantTurn,NavMeshAgent navMeshAgent, Vector2 PointPositiontOfRandomPointSearchArea,
-                                              float timeBetweenPatrols, float walkPointRange, MutantPositionGeneration _mutantPositionGeneration)
+        public IEnumerator CoroutinePatroling(MutantControl mutantTurn, NavMeshAgent navMeshAgent, Vector2 PointPositiontOfRandomPointSearchArea,
+                                              float timeBetweenPatrols, float walkPointRange, MutantGenerationService _mutantPositionGeneration)
         {
             if (navMeshAgent == null)
             {
-               yield return null;
+                yield return null;
             }
             else
             {
@@ -45,7 +37,7 @@ namespace Assets.Common.Scipts.Mutant.MutantModes
                 }
             }
         }
-        private void SearchWalkPoint(Vector2 position, float walkPointRange, MutantPositionGeneration _mutantPositionGeneration)
+        private void SearchWalkPoint(Vector2 position, float walkPointRange, MutantGenerationService _mutantPositionGeneration)
         {
             walkPoint = _mutantPositionGeneration.GetRandomMutantPositionGeneration(position, walkPointRange);
 

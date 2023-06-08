@@ -106,14 +106,7 @@ public class InventoryController : MonoBehaviour
         slots.Remove(inventorySlotVE);
 
         InventorySlotVisualElement item = new InventorySlotVisualElement(this);
-        //slots.Add(item);
-        //slots.Sort((u, v) =>
-        //{
-        //    if (!u.IsEmpty && !v.IsEmpty)//
-        //        return 0;
-
-        //    return u.IsEmpty.CompareTo(v.IsEmpty) == -1 ? -1 : 1;
-        //});
+        slots.Add(item);
         SlotContainerVisualElement.Add(item);
 
     }

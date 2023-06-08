@@ -10,7 +10,8 @@ namespace Assets.Common.Scipts.HeroInventory
         public Item item;
         public Image slotImage;
         public Label slotLabelCount;
-        [SerializeField]private int count;
+        [SerializeField]
+        private int count;
         public int Count
         {
             get
@@ -126,6 +127,11 @@ namespace Assets.Common.Scipts.HeroInventory
                     break;
             }
 
+        }
+
+        public void Destroy()
+        {
+            //kappa
         }
     }
 }

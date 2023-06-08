@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
 
 namespace Assets.Common.Scipts.Mutant.HelperClasses
@@ -13,10 +8,9 @@ namespace Assets.Common.Scipts.Mutant.HelperClasses
         public float Radius;
 
         [Inject]
-        void Construct(MutantPositionGeneration mutantPositionGeneration)
+        void Construct(MutantGenerationService mutantPositionGeneration)
         {
-            mutantPositionGeneration.startPoint = transform.position;
-            mutantPositionGeneration.radius = Radius;
+            mutantPositionGeneration.SetBaseParameters(transform.position, Radius);
         }
         private void OnDrawGizmos()
         {

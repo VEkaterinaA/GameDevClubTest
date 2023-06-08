@@ -92,7 +92,7 @@ public class LocationInstaller : MonoInstaller, IInitializable
             .AsSingle();
 
         Container
-            .Bind<MutantPositionGeneration>()
+            .Bind<MutantGenerationService>()
             .AsSingle();
 ;
     }

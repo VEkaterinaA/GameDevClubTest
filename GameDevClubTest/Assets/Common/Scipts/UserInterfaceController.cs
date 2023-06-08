@@ -1,5 +1,4 @@
-﻿using Assets.Common.Scipts.Weapon;
-using System.IO;
+﻿using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,13 +11,12 @@ namespace Assets.Common.Scipts
 {
     public class UserInterfaceController : MonoBehaviour
     {
-        private FileOperations _data;
+        private FileOperations _fileOperations;
         private HeroController _heroController;
         public InventoryController _inventoryController;
 
         private bool IsHeroAttack = false;
         private bool IsHeroKilled = false;
-        private bool IsPaused = false;
 
         private string FileInventoryPath;
         private string FileInventoryDataName = "InventoryData.json";
@@ -36,7 +34,7 @@ namespace Assets.Common.Scipts
         private void Contruct(HeroController heroController, FileOperations data)
         {
             _heroController = heroController;
-            _data = data;
+            _fileOperations = data;
         }
         private void Awake()
         {
@@ -87,8 +85,8 @@ namespace Assets.Common.Scipts
         {
             DeleteFiles();
             SceneManager.LoadScene(0);
-            PauseGame(false,1);
-                }
+            PauseGame(false, 1);
+        }
         private void DeleteFiles()
         {
 #if PLATFORM_ANDROID && !UNITY_EDITOR
@@ -104,32 +102,31 @@ namespace Assets.Common.Scipts
         }
         private void OnApplicationQuit()
         {
-            if(IsHeroKilled)
+            if (IsHeroKilled)
             {
                 DeleteFiles();
                 return;
             }
-            _data.SaveToFile(_inventoryController.slots, _heroController._heroCharacteristics);
+            _fileOperations.SaveToFile(_inventoryController.slots, _heroController._heroCharacteristics);
         }
         private void OnApplicationPause(bool pause)
         {
-            if(pause)
+            if (pause)
             {
                 PauseGame(true, 0);
             }
             if (!pause)
             {
-                PauseGame(false,1);
+                PauseGame(false, 1);
             }
         }
 
         private void PauseGame(bool pause, float timeScale)
         {
-            if(timeScale!=0 && timeScale!=1)
+            if (timeScale != 0 && timeScale != 1)
             {
                 return;
             }
-            IsPaused = pause;
             Time.timeScale = timeScale;
         }
     }

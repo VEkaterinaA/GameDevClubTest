@@ -3,21 +3,27 @@ using UnityEngine.AI;
 
 namespace Assets.Common.Scipts.Mutant.HelperClasses
 {
-    public class MutantPositionGeneration
+    public class MutantGenerationService
     {
-        public Vector2 startPoint;
-        public float radius;
+        private Vector2 _startPoint;
+        private float _radius;
 
-        public Vector2 GetRandomStartPointMutantPositionGeneration()
+        public void SetBaseParameters(Vector2 startPoint, float radius)
         {
-            return RandomMutantPositionGeneration(startPoint, radius);
+            _startPoint = startPoint;
+            _radius = radius;
+        }
+
+        public Vector2 GetRandomStartPosition()
+        {
+            return GenerateRandomPosition(_startPoint, _radius);
         }
         public Vector2 GetRandomMutantPositionGeneration(Vector2 StartPoint, float Radius)
         {
-            return RandomMutantPositionGeneration(StartPoint, Radius);
+            return GenerateRandomPosition(StartPoint, Radius);
         }
 
-        private Vector2 RandomMutantPositionGeneration(Vector2 StartPoint, float Radius)
+        private Vector2 GenerateRandomPosition(Vector2 StartPoint, float Radius)
         {
             Vector2 FinalPoint = Vector2.zero;
             if (Radius != 0)
