@@ -27,6 +27,11 @@ namespace Assets.Common.Scipts.Hero
         {
             _healthBar = new HealthBar(health, maxHealth, image);
         }
+        public void TakingDamage(int damage)
+        {
+            _healthBar.UpdateFillAmount(damage);
+            health -= damage;
+        }
         public TransformInfo ConvertTransformToTransformInfo()
         {
             return new TransformInfo(HeroTransform);

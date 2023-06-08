@@ -127,7 +127,6 @@ public class InventoryController : MonoBehaviour
         }
         _fileOperations.LoadInventory(slots);
         BulletSlot();
-        TestAddTwoSlot();
     }
 
     private void BulletSlot()
@@ -187,12 +186,5 @@ public class InventoryController : MonoBehaviour
             return;
         }
 
-    }
-    private void TestAddTwoSlot()
-    {
-        var emptySlot = slots.FirstOrDefault(u => u.IsEmpty == true);
-        emptySlot.SetItem(CreateItem("Sprites/Inventory/Clothes/SovietBag", TypeItem.Clothes), 30);
-        emptySlot = slots.FirstOrDefault(u => u.IsEmpty == true);
-        emptySlot.SetItem(CreateItem("Sprites/Inventory/Clothes/BulletproofCloak", TypeItem.Clothes), 30);
     }
 }

@@ -11,9 +11,9 @@ namespace Assets.Common.Scipts.Mutant.MutantModes
 {
     public class Chase
     {
-        public void ChaseHero(MutantTurn mutantTurn,NavMeshAgent navMeshAgent, Vector3 MutantPosition)
+        public void ChaseHero(MutantTurn mutantTurn,NavMeshAgent navMeshAgent, Vector3 HeroPosition)
         {
-            navMeshAgent.SetDestination(MutantPosition);
+            navMeshAgent.SetDestination(HeroPosition);
             mutantTurn.RotationMutantRelativeToMovement(navMeshAgent.velocity);
 
         }

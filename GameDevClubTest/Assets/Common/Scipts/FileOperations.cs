@@ -80,8 +80,8 @@ namespace Assets.Common.Scipts
             if (!File.Exists(saveHeroCharacteristicsPath))
             {
                 Debug.Log($"File {saveHeroCharacteristicsPath} not found");
-                heroCharacteristics.health = 200;
-                heroCharacteristics.maxHealth = 200;
+                heroCharacteristics.health = 100;
+                heroCharacteristics.maxHealth = 100;
                 heroCharacteristics.damage = 20;
                 heroCharacteristics.speed = 3f;
                 return;

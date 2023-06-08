@@ -15,7 +15,6 @@ public class HeroController : MonoBehaviour
 {
     //Classes
     private HeroMove _heroMove;
-    private HealthBar _healthBar;
     private FileOperations _data;
     public HeroWeapon _heroWeapon;
     public InventoryController inventory;
@@ -188,12 +187,10 @@ public class HeroController : MonoBehaviour
     }
     public void TakingHeroDamage(int damage)
     {
-        _heroCharacteristics.health -= damage;
-        _healthBar.UpdateFillAmount(damage);
+        _heroCharacteristics.TakingDamage(damage);
 
         if (_heroCharacteristics.health <= 0)
         {
-            //Die
             OnHeroDeath?.Invoke();
         }
     }

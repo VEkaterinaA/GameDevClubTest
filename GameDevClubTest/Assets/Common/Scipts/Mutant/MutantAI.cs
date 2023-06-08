@@ -60,11 +60,11 @@ public class MutantAI : MonoBehaviour
     {
         Vector2 distanceToWalkPoint = transform.position - _heroController.transform.position;
 
-        if (distanceToWalkPoint.x < sightRange & distanceToWalkPoint.y < sightRange)
+        if (Mathf.Abs(distanceToWalkPoint.x) < sightRange & Mathf.Abs(distanceToWalkPoint.y) < sightRange)
         {
             StopCoroutine(nameof(_patrol.CoroutinePatroling));
 
-            if (distanceToWalkPoint.x < attackRange & distanceToWalkPoint.y < attackRange)
+            if (Mathf.Abs(distanceToWalkPoint.x) < attackRange & Mathf.Abs(distanceToWalkPoint.y) < attackRange)
             {
                 StartCoroutine((_attack.CoroutineAttackHero(_heroController, navMeshAgent, transform, timeBetweenAttacks, _mutantCharacteristics.damage)));
             }
