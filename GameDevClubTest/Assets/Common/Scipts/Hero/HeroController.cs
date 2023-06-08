@@ -19,6 +19,8 @@ public class HeroController : MonoBehaviour
     private FileOperations _data;
     public HeroWeapon _heroWeapon;
     public InventoryController inventory;
+    public CreateBullet _createBullet;
+    [HideInInspector]
     public HeroCharacteristics _heroCharacteristics;
 
     [HideInInspector]
@@ -39,12 +41,12 @@ public class HeroController : MonoBehaviour
     private bool IsShoot = false;
     private bool IsAttackMode = false;
     private float dirX, dirY;
-    public float timeBetweenAttacks = 0.3f;
 
     [Inject]
-    private void Construct(FileOperations data)
+    private void Construct(FileOperations data, HeroWeapon heroWeapon)
     {
         _data = data;
+        _heroWeapon = heroWeapon;
     }
     private void Start()
     {
@@ -52,10 +54,12 @@ public class HeroController : MonoBehaviour
 
         RigidbodyHero = GetComponent<Rigidbody2D>();
 
+
     }
     private void Update()
     {
         _heroMove.JoystickCoordinateUpdate(joystick, _heroCharacteristics.speed, out dirX, out dirY);
+
     }
     private void FixedUpdate()
     {
@@ -103,7 +107,6 @@ public class HeroController : MonoBehaviour
             var tag = objectCollisionEventDetails.transform.tag;
             if (tag == "NPC")
             {
-                if (ListAttackMutants.Any(u => u == objectCollisionEventDetails)) return;
                 ListAttackMutants.Add(objectCollisionEventDetails.transform);
                 if (!IsAttackMode)
                 {
@@ -170,8 +173,7 @@ public class HeroController : MonoBehaviour
         {
             IsShoot = true;
             _heroWeapon.SubstractBullet();
-            var mutant = TrackedMutantTransform.GetComponent<MutantAI>();
-            mutant._mutantHealth.TakeDamage(_heroCharacteristics.damage);
+            _createBullet.LoadBulletPrefab();
             IsShoot = false;
         }
     }
@@ -197,10 +199,10 @@ public class HeroController : MonoBehaviour
     }
     private void LoadHelperClasses()
     {
-        _heroCharacteristics = new HeroCharacteristics(transform);
+        _heroCharacteristics = new HeroCharacteristics(transform, HealthBar);
         _data.LoadHeroCharacteristics(_heroCharacteristics);
+        _heroCharacteristics.InitHealth();
         _heroMove = new HeroMove();
-        _healthBar = new HealthBar(_heroCharacteristics.health, _heroCharacteristics.health, HealthBar);
     }
 
 }

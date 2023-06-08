@@ -1,7 +1,6 @@
 ﻿using Assets.Common.Scipts;
 using Assets.Common.Scipts.HeroInventory;
 using Assets.Common.Scipts.Weapon;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -108,13 +107,13 @@ public class InventoryController : MonoBehaviour
 
         InventorySlotVisualElement item = new InventorySlotVisualElement(this);
         //slots.Add(item);
-        slots.Sort((u, v) =>
-        {
-            if (!u.IsEmpty && !v.IsEmpty)//
-                return 0;
+        //slots.Sort((u, v) =>
+        //{
+        //    if (!u.IsEmpty && !v.IsEmpty)//
+        //        return 0;
 
-            return u.IsEmpty.CompareTo(v.IsEmpty) == -1 ? -1 : 1;
-        });
+        //    return u.IsEmpty.CompareTo(v.IsEmpty) == -1 ? -1 : 1;
+        //});
         SlotContainerVisualElement.Add(item);
 
     }
@@ -128,12 +127,12 @@ public class InventoryController : MonoBehaviour
         }
         _fileOperations.LoadInventory(slots);
         BulletSlot();
-
+        TestAddTwoSlot();
     }
 
     private void BulletSlot()
     {
-        var slotBullet = slots.FirstOrDefault(u => u.item!=null && u.item.typeItem == TypeItem.Bullet);
+        var slotBullet = slots.FirstOrDefault(u => u.item != null && u.item.typeItem == TypeItem.Bullet);
         if (slotBullet == null)
         {
             var emptySlot = slots.FirstOrDefault(u => u.IsEmpty == true);
@@ -141,18 +140,16 @@ public class InventoryController : MonoBehaviour
             {
                 return;
             }
-            FillEmptySlotBulletDefault(emptySlot);
-            _heroWeapon.InitBullet(emptySlot);
+            AddBulletSlot(emptySlot);
             return;
         }
-        _heroWeapon.InitBullet(slotBullet);
+        AddBulletSlot(slotBullet);
     }
 
-    private void FillEmptySlotBulletDefault(InventorySlotVisualElement emptySlot)
+    private void AddBulletSlot(InventorySlotVisualElement emptySlot)
     {
-        emptySlot.item = CreateItem("Assets/Resources/Sprites/Inventory/Bullet/5.45x39", TypeItem.Bullet);
-        emptySlot.IsEmpty = false;
-        emptySlot.Count = 30;
+        emptySlot.SetItem(CreateItem("Sprites/Inventory/Bullet/5.45x39", TypeItem.Bullet), 30);
+        _heroWeapon.InitBullet(emptySlot);
     }
 
     private Item CreateItem(string sprite, TypeItem type)
@@ -190,5 +187,12 @@ public class InventoryController : MonoBehaviour
             return;
         }
 
+    }
+    private void TestAddTwoSlot()
+    {
+        var emptySlot = slots.FirstOrDefault(u => u.IsEmpty == true);
+        emptySlot.SetItem(CreateItem("Sprites/Inventory/Clothes/SovietBag", TypeItem.Clothes), 30);
+        emptySlot = slots.FirstOrDefault(u => u.IsEmpty == true);
+        emptySlot.SetItem(CreateItem("Sprites/Inventory/Clothes/BulletproofCloak", TypeItem.Clothes), 30);
     }
 }

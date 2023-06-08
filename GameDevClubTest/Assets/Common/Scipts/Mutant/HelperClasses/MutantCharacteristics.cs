@@ -9,6 +9,7 @@ namespace Assets.Common.Scipts.Mutant.HelperClasses
 {
     public class MutantCharacteristics : CommonCharacteristics
     {
+
         public MutantCharacteristics()
         {
             health = 100;

@@ -1,3 +1,4 @@
+using Assets.Common.Scipts.Hero;
 using Assets.Common.Scipts.HeroInventory;
 using Assets.Common.Scipts.Mutant.HelperClasses;
 using Assets.Common.Scipts.Mutant.MutantModes;
@@ -77,6 +78,16 @@ public class MutantAI : MonoBehaviour
             StopCoroutine(nameof(_attack.CoroutineAttackHero));
             StartCoroutine((_patrol.CoroutinePatroling(_mutantTurn, navMeshAgent, transform.position, timeBetweenPatrols, walkPointRange, _mutantPositionGeneration)));
         }
+    }
+    private void OnCollisionEnter2D(Collision2D objectCollisionEventDetails)
+    {
+        if (objectCollisionEventDetails.transform.tag != "Bullet")
+        {
+            return;
+        }
+        _mutantHealth.TakeDamage(_heroController._heroCharacteristics.damage);
+        Destroy(objectCollisionEventDetails.gameObject);
+
     }
     private void Subscribe()
     {

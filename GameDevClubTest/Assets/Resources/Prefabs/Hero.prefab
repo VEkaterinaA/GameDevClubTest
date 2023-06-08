@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 7874071306955150713}
   - component: {fileID: 8650729366674190788}
   m_Layer: 0
-  m_Name: "\u0413\u043E\u043B\u043E\u0432\u0430"
+  m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -353,6 +353,50 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 2.56
+--- !u!1 &2639487735785141122
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1904231616697217896}
+  - component: {fileID: 3334579314262661973}
+  m_Layer: 0
+  m_Name: StartPointBullet
+  m_TagString: Untagged
+  m_Icon: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1904231616697217896
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2639487735785141122}
+  m_LocalRotation: {x: -0, y: -0, z: -0.00000011920926, w: 1}
+  m_LocalPosition: {x: 1.7679121, y: 0.20099986, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5904029703558276458}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3334579314262661973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2639487735785141122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce34cddfcc6526d43b92801ab8f9313d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2679432702526753000
 GameObject:
   m_ObjectHideFlags: 0
@@ -365,7 +409,7 @@ GameObject:
   - component: {fileID: 1147680883241700770}
   - component: {fileID: 3597419849855318569}
   m_Layer: 0
-  m_Name: "\u0420\u0443\u043A\u0430\u041B\u0435\u0432"
+  m_Name: Shoulder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -488,6 +532,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3441084675660300039}
+  - {fileID: 1904231616697217896}
   m_Father: {fileID: 8244752372899841622}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
@@ -730,7 +775,7 @@ GameObject:
   - component: {fileID: 2490557392177502056}
   - component: {fileID: 334595128144641736}
   m_Layer: 0
-  m_Name: "\u0422\u0443\u043B\u043E\u0432\u0438\u0449\u0435"
+  m_Name: Torso
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -876,7 +921,7 @@ GameObject:
   - component: {fileID: 3408536090822894296}
   - component: {fileID: 9163131023156696562}
   m_Layer: 0
-  m_Name: "\u0420\u0443\u043A\u0430\u041F\u0440\u0430\u0432"
+  m_Name: Shoulder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1058,7 +1103,7 @@ GameObject:
   - component: {fileID: 236534575270364546}
   - component: {fileID: 4507687437715643451}
   m_Layer: 0
-  m_Name: "\u041D\u043E\u0433\u04302"
+  m_Name: Leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1195,7 +1240,7 @@ GameObject:
   - component: {fileID: 8834131361897262327}
   - component: {fileID: 7835166835071223887}
   m_Layer: 0
-  m_Name: "\u0440\u0443\u043A\u04302\u041F\u0440\u0430\u0432"
+  m_Name: Forearm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1301,7 +1346,7 @@ GameObject:
   - component: {fileID: 7633365208043333031}
   - component: {fileID: 4776279905165468614}
   m_Layer: 0
-  m_Name: "\u041D\u043E\u0433\u0430"
+  m_Name: Leg2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1407,7 +1452,7 @@ GameObject:
   - component: {fileID: 2072857222412515842}
   - component: {fileID: 8584937919788628029}
   m_Layer: 0
-  m_Name: "\u0440\u0443\u043A\u04302\u041B\u0435\u0432"
+  m_Name: Forearm2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1598,13 +1643,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventory: {fileID: 0}
+  _createBullet: {fileID: 3334579314262661973}
+  _heroCharacteristics:
+    health: 0
+    damage: 0
+    speed: 0
+    HeroTransform: {fileID: 0}
+    transformInfo:
+      pos: {x: 0, y: 0, z: 0}
+      rot: {x: 0, y: 0, z: 0, w: 0}
+      scale: {x: 0, y: 0, z: 0}
   joystick: {fileID: 0}
   ElbowRotation: {fileID: 5904029703558276458}
   HealthBar: {fileID: 5049119670866388982}
   HeroBody: {fileID: 6796316650413693341}
   TrackedMutantTransform: {fileID: 0}
-  speed: 3
-  timeBetweenAttacks: 1
 --- !u!1 &8497056633007514762
 GameObject:
   m_ObjectHideFlags: 0

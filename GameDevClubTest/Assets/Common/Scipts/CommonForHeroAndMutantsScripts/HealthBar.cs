@@ -7,10 +7,14 @@ using UnityEngine.UI;
 
 namespace Assets.Common.Scipts.CommonForHeroAndMutantsScripts
 {
+    [Serializable]
     public class HealthBar
     {
+        [NonSerialized]
         private float healthPercent;
+        [NonSerialized]
         private Image Bar;
+        [NonSerialized]
         private int health;
         private int maxHealth;
         public HealthBar(int health, int maxHealth, Image image)

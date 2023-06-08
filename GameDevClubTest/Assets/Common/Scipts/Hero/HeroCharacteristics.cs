@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Common.Scipts.Hero
 {
@@ -13,9 +14,18 @@ namespace Assets.Common.Scipts.Hero
     {
         public Transform HeroTransform;
         public TransformInfo transformInfo;
-        public HeroCharacteristics(Transform heroTransform)
+        private HealthBar _healthBar;
+        [NonSerialized]
+        private Image image;
+        public HeroCharacteristics(Transform heroTransform, Image image)
         {
             HeroTransform = heroTransform;
+            this.image = image;
+            
+        }
+        public void InitHealth()
+        {
+            _healthBar = new HealthBar(health, maxHealth, image);
         }
         public TransformInfo ConvertTransformToTransformInfo()
         {

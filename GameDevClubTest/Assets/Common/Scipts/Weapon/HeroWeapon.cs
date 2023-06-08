@@ -11,15 +11,16 @@ namespace Assets.Common.Scipts.Weapon
     {
         public event Action OnChangeBulletCount;
         private InventorySlotVisualElement _bulletSlot;
+        private int countBullet;
         public int CountBullet
         {
             get
             {
-                return _bulletSlot.Count;
+                return countBullet;
             }
             set
             {
-                _bulletSlot.Count = value;
+                countBullet = value;
                 OnChangeBulletCount?.Invoke();
             }
         }
@@ -27,14 +28,17 @@ namespace Assets.Common.Scipts.Weapon
         public void InitBullet(InventorySlotVisualElement bulletSlot)
         {
             _bulletSlot = bulletSlot;
+            CountBullet = _bulletSlot.Count;
         }
         public void SubstractBullet()
         {
             _bulletSlot.SubstractCount(1);;
+            CountBullet = _bulletSlot.Count;
         }
         public void AddBullet(int count)
         {
             _bulletSlot.SetCount(count);
+            CountBullet = _bulletSlot.Count;
         }
     }
 }

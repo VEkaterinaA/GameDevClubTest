@@ -1,4 +1,5 @@
-﻿using Assets.Common.Scipts.Hero;
+﻿using Assets.Common.Scipts.CommonForHeroAndMutantsScripts;
+using Assets.Common.Scipts.Hero;
 using Assets.Common.Scipts.HeroInventory;
 using System;
 using System.Collections.Generic;
@@ -38,7 +39,8 @@ namespace Assets.Common.Scipts
                 transform = heroCharacteristics.ConvertTransformToTransformInfo(),
                 health = heroCharacteristics.health,
                 damage = heroCharacteristics.damage,
-                speed = heroCharacteristics.speed
+                maxHealth = heroCharacteristics.maxHealth,
+                speed = heroCharacteristics.speed,
             };
 
 
@@ -58,7 +60,7 @@ namespace Assets.Common.Scipts
         {
             InventorySaveStruct inventorySaveStruct = new InventorySaveStruct
             {
-                slots = slots.ToArray()
+                slots = slots.Where(u=>u.IsEmpty==false).ToArray()
             };
             string json = JsonUtility.ToJson(inventorySaveStruct, true);
             try
@@ -79,6 +81,7 @@ namespace Assets.Common.Scipts
             {
                 Debug.Log($"File {saveHeroCharacteristicsPath} not found");
                 heroCharacteristics.health = 200;
+                heroCharacteristics.maxHealth = 200;
                 heroCharacteristics.damage = 20;
                 heroCharacteristics.speed = 3f;
                 return;
@@ -86,8 +89,10 @@ namespace Assets.Common.Scipts
             try
             {
                 string json = File.ReadAllText(saveHeroCharacteristicsPath);
+
                 HeroCharacteristicsSaveStruct heroCharacterJson = JsonUtility.FromJson<HeroCharacteristicsSaveStruct>(json);
                 heroCharacteristics.health = heroCharacterJson.health;
+                heroCharacteristics.maxHealth = heroCharacterJson.maxHealth;
                 heroCharacteristics.speed = heroCharacterJson.speed;
                 heroCharacteristics.damage = heroCharacterJson.damage;
                 heroCharacteristics.ConvertTransformInfoToTransform(heroCharacterJson.transform);
@@ -126,7 +131,6 @@ namespace Assets.Common.Scipts
                 Debug.Log("LoadInventory error: " + e.Message);
             }
         }
-
     }
 
 
@@ -140,6 +144,7 @@ namespace Assets.Common.Scipts
     {
         public TransformInfo transform;
         public int health;
+        public int maxHealth;
         public int damage;
         public float speed;
     }
