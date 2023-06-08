@@ -566,7 +566,7 @@ MonoBehaviour:
   timeBetweenPatrols: 4
   timeBetweenAttacks: 0.5
   sightRange: 15
-  attackRange: 3
+  attackRange: 4
   healthBarImage: {fileID: 6562799090440576100}
   MutantBody: {fileID: 4479076298622958694}
 --- !u!1 &3587209567982574325

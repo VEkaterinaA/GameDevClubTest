@@ -1,0 +1,32 @@
+{
+    "slots": [
+        {
+            "item": {
+                "imagePath": "Sprites/Inventory/Bullet/5.45x39",
+                "typeItem": 4
+            },
+            "count": 1
+        },
+        {
+            "item": {
+                "imagePath": "Sprites/Inventory/Clothes/MilitaryHelmet",
+                "typeItem": 3
+            },
+            "count": 1
+        },
+        {
+            "item": {
+                "imagePath": "Sprites/Inventory/Clothes/SovietBag",
+                "typeItem": 3
+            },
+            "count": 5
+        },
+        {
+            "item": {
+                "imagePath": "Sprites/Inventory/Weapons/AK-74",
+                "typeItem": 1
+            },
+            "count": 3
+        }
+    ]
+}

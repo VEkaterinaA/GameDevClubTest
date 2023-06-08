@@ -27,6 +27,7 @@ namespace Assets.Common.Scipts.HeroInventory
         }
         [NonSerialized]
         public int MaxCount;
+        [NonSerialized]
         public bool IsEmpty;
         private InventoryController _inventoryController;
 

@@ -135,12 +135,12 @@ public class InventoryController : MonoBehaviour
             AddBulletSlot(emptySlot);
             return;
         }
-        AddBulletSlot(slotBullet);
+        _heroWeapon.InitBullet(slotBullet);
     }
 
     private void AddBulletSlot(InventorySlotVisualElement emptySlot)
     {
-        emptySlot.SetItem(CreateItem("Sprites/Inventory/Bullet/5.45x39", TypeItem.Bullet), 30);
+        emptySlot.SetItem(CreateItem("Sprites/Inventory/Bullet/5.45x39", TypeItem.Bullet), 60);
         _heroWeapon.InitBullet(emptySlot);
     }
 
